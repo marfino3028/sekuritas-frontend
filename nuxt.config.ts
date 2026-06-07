@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-06-07',
 
   // SPA mode: gunakan routeRules, bukan ssr: false (fix Nuxt 3.21+ bug)
   routeRules: {
