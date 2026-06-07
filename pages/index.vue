@@ -177,6 +177,69 @@
       </div>
     </section>
 
+    <!-- Berita & Artikel Terbaru -->
+    <section v-if="articles.length" class="py-24 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+          <div class="max-w-2xl">
+            <span class="text-accent-600 font-semibold text-sm uppercase tracking-wider">Wawasan</span>
+            <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-3">Berita & Artikel Terbaru</h2>
+            <p class="text-slate-500 text-lg">Update terkini seputar pasar modal, edukasi, dan tips investasi.</p>
+          </div>
+          <NuxtLink
+            to="/artikel"
+            class="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800 transition-colors"
+          >
+            Lihat Semua
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </NuxtLink>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <NuxtLink
+            v-for="article in articles"
+            :key="article.id"
+            :to="`/artikel/${article.slug}`"
+            class="group flex flex-col rounded-card bg-white border border-slate-100 shadow-card overflow-hidden hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
+          >
+            <!-- Cover: image if available, else branded gradient -->
+            <div class="relative h-44 overflow-hidden" :class="categoryGradient(article.category)">
+              <img
+                v-if="article.image_url"
+                :src="article.image_url"
+                :alt="article.title"
+                class="absolute inset-0 w-full h-full object-cover"
+              />
+              <div v-else class="absolute inset-0 flex items-center justify-center">
+                <!-- chart motif -->
+                <svg class="w-20 h-20 text-white/20" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                </svg>
+                <div class="pointer-events-none absolute -bottom-8 -right-6 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
+              </div>
+              <span
+                v-if="article.category"
+                class="absolute top-4 left-4 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-soft"
+                :class="categoryBadge(article.category)"
+              >
+                {{ article.category }}
+              </span>
+            </div>
+
+            <div class="flex flex-col flex-1 p-6">
+              <h3 class="font-display font-extrabold tracking-tight text-lg text-slate-900 leading-snug mb-3 line-clamp-2 group-hover:text-primary-700 transition-colors">
+                {{ article.title }}
+              </h3>
+              <p v-if="article.excerpt" class="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-5">{{ article.excerpt }}</p>
+              <p class="mt-auto text-xs text-slate-400">{{ formatArticleDate(article.published_at) }}</p>
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-24 bg-brand-soft">
       <div class="max-w-5xl mx-auto px-4 sm:px-6">
@@ -253,7 +316,60 @@
 <script setup lang="ts">
 definePageMeta({ layout: false })
 
+interface Article {
+  id: number | string
+  title: string
+  slug: string
+  category: string | null
+  excerpt: string | null
+  image_url: string | null
+  published_at: string | null
+}
+
 const chartBars = [40, 55, 45, 60, 52, 68, 72, 65, 78, 82, 75, 90]
+
+// Berita & Artikel Terbaru
+const { get } = useApi()
+const articles = ref<Article[]>([])
+
+try {
+  const res = await get<{ success: boolean; data: Article[] }>('/articles', { per_page: 3 })
+  articles.value = res?.data ?? []
+} catch {
+  // Sembunyikan section bila fetch gagal
+  articles.value = []
+}
+
+const formatArticleDate = (date: string | null): string => {
+  if (!date) return ''
+  return new Date(date).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+// Palet badge kategori — warna beda per kategori
+const categoryBadge = (category: string | null): string => {
+  const map: Record<string, string> = {
+    'Berita Pasar': 'bg-primary-50 text-primary-700',
+    Edukasi: 'bg-accent-50 text-accent-700',
+    Tips: 'bg-emerald-50 text-emerald-700',
+    Analisis: 'bg-amber-50 text-amber-700',
+  }
+  return map[category ?? ''] ?? 'bg-white/90 text-slate-700'
+}
+
+// Gradient cover branded per kategori
+const categoryGradient = (category: string | null): string => {
+  const map: Record<string, string> = {
+    'Berita Pasar': 'bg-gradient-to-br from-primary-600 to-accent-600',
+    Edukasi: 'bg-gradient-to-br from-accent-600 to-primary-700',
+    Tips: 'bg-gradient-to-br from-emerald-500 to-primary-600',
+    Analisis: 'bg-gradient-to-br from-amber-500 to-accent-600',
+  }
+  return map[category ?? ''] ?? 'bg-brand-gradient'
+}
 
 const features = [
   {

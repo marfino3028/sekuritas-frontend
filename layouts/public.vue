@@ -94,6 +94,7 @@ const route = useRoute()
 const navItems = [
   { to: '/produk', label: 'Reksa Dana' },
   { to: '/manajer-investasi', label: 'Manajer Investasi' },
+  { to: '/artikel', label: 'Artikel' },
 ]
 
 const isActive = (path: string) => route.path.startsWith(path)
