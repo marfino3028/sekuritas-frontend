@@ -1,32 +1,35 @@
 <template>
   <div>
     <NuxtLayout name="auth">
-      <div class="bg-white rounded-2xl shadow-card p-8">
+      <div class="relative bg-white rounded-card shadow-card ring-1 ring-primary-50 border border-slate-100 p-6 sm:p-8 overflow-hidden">
+        <!-- Soft gradient orbs (asymmetric accents) -->
+        <div class="pointer-events-none absolute -top-16 -right-16 w-44 h-44 rounded-full bg-brand-gradient opacity-10 blur-2xl"></div>
+        <div class="pointer-events-none absolute -bottom-20 -left-12 w-40 h-40 rounded-full bg-accent-300 opacity-10 blur-2xl"></div>
+
         <!-- Logo/Title -->
-        <div class="text-center mb-8">
-          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
-               style="background: linear-gradient(135deg, #14b8a6, #0ea5e9)">
+        <div class="relative mb-8">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-soft bg-brand-gradient">
             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
             </svg>
           </div>
-          <h1 class="text-2xl font-bold text-gray-800">Masuk ke Akun</h1>
-          <p class="text-gray-500 text-sm mt-1">Selamat datang kembali di Sekuritas</p>
+          <h1 class="font-display text-3xl font-extrabold tracking-tight text-primary-900">Masuk ke Akun</h1>
+          <p class="text-slate-500 text-sm mt-2">Selamat datang kembali di Sekuritas</p>
         </div>
 
         <!-- Step 1: Phone input -->
-        <div v-if="step === 1">
+        <div v-if="step === 1" class="relative">
           <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Handphone</label>
+            <label class="block text-sm font-medium text-slate-700 mb-2">Nomor Handphone</label>
             <div class="flex">
-              <div class="flex items-center px-3 bg-gray-50 border border-r-0 border-gray-300 rounded-l-lg text-sm text-gray-600 font-medium">
+              <div class="flex items-center px-3 bg-primary-50 border border-r-0 border-primary-100 rounded-l-xl text-sm text-primary-700 font-semibold">
                 +62
               </div>
               <input
                 v-model="phone"
                 type="tel"
                 placeholder="8xxxxxxxxxx"
-                class="flex-1 border border-gray-300 rounded-r-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                class="flex-1 border border-slate-200 rounded-r-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 @keyup.enter="sendOtp"
                 inputmode="numeric"
               />
@@ -37,9 +40,8 @@
           <button
             @click="sendOtp"
             :disabled="loading || !phone"
-            class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md hover:scale-[1.01] active:scale-[0.99]"
-            :class="phone && !loading ? 'text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'"
-            :style="phone && !loading ? 'background: linear-gradient(135deg, #14b8a6, #0ea5e9)' : ''"
+            class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-card-hover hover:-translate-y-0.5 active:translate-y-0"
+            :class="phone && !loading ? 'text-white bg-brand-gradient' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
           >
             <span v-if="loading" class="flex items-center justify-center gap-2">
               <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -51,34 +53,34 @@
             <span v-else>Kirim Kode OTP</span>
           </button>
 
-          <p class="text-center text-sm text-gray-500 mt-5">
+          <p class="text-center text-sm text-slate-500 mt-5">
             Belum punya akun?
-            <NuxtLink to="/register" class="text-teal-600 font-semibold hover:underline">Daftar Sekarang</NuxtLink>
+            <NuxtLink to="/register" class="text-primary-600 font-semibold hover:underline">Daftar Sekarang</NuxtLink>
           </p>
         </div>
 
         <!-- Step 2: OTP Verification -->
-        <div v-else-if="step === 2">
+        <div v-else-if="step === 2" class="relative">
           <div class="text-center mb-6">
-            <div class="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-12 h-12 bg-primary-50 ring-1 ring-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
             </div>
-            <p class="text-sm text-gray-600">Kode OTP dikirim ke</p>
-            <p class="font-semibold text-gray-800">+62{{ phone }}</p>
+            <p class="text-sm text-slate-600">Kode OTP dikirim ke</p>
+            <p class="font-semibold text-primary-900">+62{{ phone }}</p>
           </div>
 
           <!-- Demo hint -->
-          <div class="mb-4 flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5">
-            <span class="text-amber-500 text-sm">🔑</span>
-            <p class="text-sm text-amber-700">
+          <div class="mb-4 flex items-center gap-2 bg-brand-soft border border-accent-200 rounded-xl px-4 py-2.5">
+            <span class="text-accent-500 text-sm">🔑</span>
+            <p class="text-sm text-accent-700">
               <span class="font-semibold">Demo:</span> gunakan kode <span class="font-mono font-bold tracking-widest">123456</span>
             </p>
           </div>
 
           <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2 text-center">Masukkan Kode OTP</label>
+            <label class="block text-sm font-medium text-slate-700 mb-2 text-center">Masukkan Kode OTP</label>
             <div class="flex gap-3 justify-center">
               <input
                 v-for="(digit, idx) in otpDigits"
@@ -88,8 +90,8 @@
                 type="text"
                 maxlength="1"
                 inputmode="numeric"
-                class="w-12 h-12 text-center text-xl font-bold border-2 rounded-xl focus:outline-none focus:border-teal-500 transition-colors"
-                :class="otpDigits[idx] ? 'border-teal-500 bg-teal-50' : 'border-gray-300'"
+                class="w-12 h-12 text-center text-xl font-bold border-2 rounded-xl focus:outline-none focus:border-primary-500 transition-colors"
+                :class="otpDigits[idx] ? 'border-primary-500 bg-primary-50' : 'border-slate-300'"
                 @input="onOtpInput(idx)"
                 @keydown.backspace="onOtpBackspace(idx)"
               />
@@ -100,9 +102,8 @@
           <button
             @click="verifyOtp"
             :disabled="loading || otpFilled.length < 6"
-            class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md"
-            :class="otpFilled.length === 6 && !loading ? 'text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'"
-            :style="otpFilled.length === 6 && !loading ? 'background: linear-gradient(135deg, #14b8a6, #0ea5e9)' : ''"
+            class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-card-hover hover:-translate-y-0.5 active:translate-y-0"
+            :class="otpFilled.length === 6 && !loading ? 'text-white bg-brand-gradient' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
           >
             <span v-if="loading">Memverifikasi...</span>
             <span v-else>Verifikasi OTP</span>
@@ -112,27 +113,27 @@
             <button
               @click="resendOtp"
               :disabled="resendCooldown > 0"
-              class="text-sm text-teal-600 font-medium hover:underline disabled:text-gray-400"
+              class="text-sm text-accent-600 font-medium hover:underline disabled:text-slate-400"
             >
               {{ resendCooldown > 0 ? `Kirim ulang dalam ${resendCooldown}s` : 'Kirim ulang OTP' }}
             </button>
           </div>
 
-          <button @click="step = 1" class="w-full text-center text-sm text-gray-500 mt-3 hover:text-gray-700">
+          <button @click="step = 1" class="w-full text-center text-sm text-slate-500 mt-3 hover:text-primary-700">
             &larr; Ubah nomor HP
           </button>
         </div>
 
         <!-- Step 3: Enter PIN -->
-        <div v-else-if="step === 3">
+        <div v-else-if="step === 3" class="relative">
           <div class="text-center mb-6">
-            <div class="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-12 h-12 bg-primary-50 ring-1 ring-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h2 class="text-lg font-semibold text-gray-800">Masukkan PIN</h2>
-            <p class="text-sm text-gray-500">Masukkan 6 digit PIN Anda</p>
+            <h2 class="font-display text-xl font-extrabold tracking-tight text-primary-900">Masukkan PIN</h2>
+            <p class="text-sm text-slate-500 mt-1">Masukkan 6 digit PIN Anda</p>
           </div>
 
           <div class="mb-6">
@@ -141,9 +142,9 @@
                 v-for="i in 6"
                 :key="i"
                 class="w-12 h-12 rounded-xl border-2 flex items-center justify-center transition-colors"
-                :class="pinValue.length >= i ? 'border-teal-500 bg-teal-50' : 'border-gray-300'"
+                :class="pinValue.length >= i ? 'border-primary-500 bg-primary-50' : 'border-slate-300'"
               >
-                <div v-if="pinValue.length >= i" class="w-3 h-3 bg-teal-600 rounded-full"></div>
+                <div v-if="pinValue.length >= i" class="w-3 h-3 bg-primary-600 rounded-full"></div>
               </div>
             </div>
             <p v-if="pinError" class="text-red-500 text-xs mt-2 text-center">{{ pinError }}</p>
@@ -155,11 +156,11 @@
               v-for="key in pinKeypad"
               :key="key"
               @click="onPinKey(key)"
-              class="h-14 rounded-xl font-semibold text-gray-700 transition-colors"
-              :class="key === '' ? 'invisible' : 'bg-gray-100 hover:bg-gray-200 active:bg-gray-300'"
+              class="h-14 rounded-xl font-semibold text-primary-700 transition-colors"
+              :class="key === '' ? 'invisible' : 'bg-primary-50 hover:bg-primary-100 active:bg-primary-200'"
             >
               <span v-if="key === 'del'">
-                <svg class="w-5 h-5 mx-auto text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 mx-auto text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
                 </svg>
               </span>
@@ -167,7 +168,7 @@
             </button>
           </div>
 
-          <p v-if="loading" class="text-center text-sm text-teal-600 mt-4">Memverifikasi PIN...</p>
+          <p v-if="loading" class="text-center text-sm text-primary-600 mt-4">Memverifikasi PIN...</p>
         </div>
       </div>
     </NuxtLayout>

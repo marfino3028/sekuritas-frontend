@@ -1,66 +1,74 @@
 <template>
-  <div class="p-4 lg:p-6">
+  <div class="p-4 lg:p-8">
     <div class="max-w-3xl mx-auto">
-      <h1 class="text-2xl font-bold text-gray-800 mb-4">Transaksi</h1>
+      <!-- Hero header: asimetris, rata-kiri, dengan orb gradient lembut -->
+      <div class="relative overflow-hidden bg-brand-gradient rounded-card shadow-card p-6 lg:p-8 mb-6">
+        <div class="absolute -top-10 -right-8 w-44 h-44 rounded-full bg-accent-400/30 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-12 left-1/3 w-40 h-40 rounded-full bg-primary-300/20 blur-3xl pointer-events-none"></div>
+        <div class="relative">
+          <p class="text-xs font-medium uppercase tracking-widest text-white/70 mb-2">Aktivitas</p>
+          <h1 class="text-3xl lg:text-4xl font-display font-extrabold tracking-tight text-white">Transaksi</h1>
+        </div>
+      </div>
 
       <!-- Tab: Order / Riwayat -->
-      <div class="flex border-b border-gray-200 mb-4">
+      <div class="flex gap-2 mb-5">
         <button
           v-for="tab in mainTabs"
           :key="tab.key"
           @click="activeMainTab = tab.key"
-          class="px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px"
+          class="px-4 py-2 rounded-xl text-sm font-semibold transition-all"
           :class="activeMainTab === tab.key
-            ? 'border-teal-600 text-teal-700'
-            : 'border-transparent text-gray-500 hover:text-gray-700'"
+            ? 'bg-primary-600 text-white shadow-card'
+            : 'bg-white text-gray-500 ring-1 ring-slate-100 hover:text-primary-700'"
         >
           {{ tab.label }}
         </button>
       </div>
 
       <!-- Filter: Reksa Dana / Saham -->
-      <div class="flex gap-2 mb-4">
+      <div class="flex gap-2 mb-6">
         <button
           v-for="f in typeFilters"
           :key="f.key"
           @click="activeTypeFilter = f.key"
-          class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors"
+          class="px-4 py-1.5 rounded-full text-xs font-medium border transition-colors"
           :class="activeTypeFilter === f.key
-            ? 'bg-teal-600 border-teal-600 text-white'
-            : 'bg-white border-gray-200 text-gray-600 hover:border-teal-400'"
+            ? 'bg-accent-500 border-accent-500 text-white'
+            : 'bg-white border-slate-100 text-gray-600 hover:border-accent-300 hover:text-accent-600'"
         >
           {{ f.label }}
         </button>
       </div>
 
       <!-- Loading -->
-      <div v-if="loading" class="space-y-3">
-        <div v-for="i in 4" :key="i" class="bg-white rounded-xl p-4 border border-gray-100 animate-pulse">
+      <div v-if="loading" class="space-y-4">
+        <div v-for="i in 4" :key="i" class="bg-white rounded-card p-5 border border-slate-100 shadow-card animate-pulse">
           <div class="flex gap-3">
-            <div class="w-10 h-10 bg-gray-200 rounded-xl"></div>
+            <div class="w-11 h-11 bg-slate-200 rounded-xl"></div>
             <div class="flex-1">
-              <div class="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
-              <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div class="h-4 bg-slate-200 rounded w-2/3 mb-2"></div>
+              <div class="h-3 bg-slate-200 rounded w-1/2"></div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Transaction list -->
-      <div v-else-if="filteredTransactions.length" class="space-y-3">
+      <div v-else-if="filteredTransactions.length" class="space-y-4">
         <div
           v-for="trx in filteredTransactions"
           :key="trx.id"
-          class="bg-white rounded-xl border border-gray-100 shadow-card p-4 cursor-pointer hover:border-teal-200 transition-colors"
+          class="bg-white rounded-card border border-slate-100 shadow-card p-5 cursor-pointer hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
           @click="selectedTrx = trx"
         >
           <div class="flex items-center gap-3">
             <div
-              class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
+              class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
               :class="{
-                'bg-teal-100': trx.type === 'subscription',
-                'bg-red-100': trx.type === 'redemption',
-                'bg-orange-100': trx.type === 'switching',
+                'bg-primary-100 text-primary-700': trx.type === 'subscription',
+                'bg-red-100 text-red-600': trx.type === 'redemption',
+                'bg-accent-100 text-accent-600': trx.type === 'switching',
               }"
             >
               {{ trx.type === 'subscription' ? '↓' : trx.type === 'redemption' ? '↑' : '⇄' }}
@@ -70,9 +78,9 @@
                 <p class="text-sm font-semibold text-gray-800">{{ trx.fund_name }}</p>
                 <span class="text-xs px-2 py-0.5 rounded-full font-medium"
                   :class="{
-                    'bg-teal-100 text-teal-700': trx.type === 'subscription',
+                    'bg-primary-100 text-primary-700': trx.type === 'subscription',
                     'bg-red-100 text-red-700': trx.type === 'redemption',
-                    'bg-orange-100 text-orange-700': trx.type === 'switching',
+                    'bg-accent-100 text-accent-600': trx.type === 'switching',
                   }">
                   {{ typeLabel(trx.type) }}
                 </span>
@@ -86,11 +94,11 @@
           </div>
 
           <!-- Progress for pending orders -->
-          <div v-if="activeMainTab === 'orders' && trx.status !== 'completed'" class="mt-3 pt-3 border-t border-gray-100">
+          <div v-if="activeMainTab === 'orders' && trx.status !== 'completed'" class="mt-4 pt-4 border-t border-slate-100">
             <div class="flex items-center gap-2">
-              <div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div class="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
                 <div
-                  class="h-full bg-teal-500 rounded-full transition-all"
+                  class="h-full bg-brand-gradient rounded-full transition-all"
                   :style="{ width: orderProgress(trx.status) + '%' }"
                 ></div>
               </div>
@@ -101,9 +109,9 @@
       </div>
 
       <!-- Empty state -->
-      <div v-else class="text-center py-16">
-        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div v-else class="bg-white rounded-card border border-slate-100 shadow-card text-center py-16 px-6">
+        <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </div>
@@ -111,7 +119,7 @@
         <p class="text-gray-400 text-sm mt-1">
           {{ activeMainTab === 'orders' ? 'Tidak ada pesanan dalam proses' : 'Riwayat transaksi kosong' }}
         </p>
-        <NuxtLink to="/produk" class="mt-3 inline-block text-teal-600 text-sm font-medium hover:underline">
+        <NuxtLink to="/produk" class="mt-4 inline-flex items-center px-5 py-2 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors">
           Mulai Investasi
         </NuxtLink>
       </div>
@@ -120,10 +128,10 @@
     <!-- Detail modal -->
     <div v-if="selectedTrx" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4" @click.self="selectedTrx = null">
       <div class="absolute inset-0 bg-black/50" @click="selectedTrx = null"></div>
-      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 z-10">
+      <div class="relative bg-white rounded-card shadow-card-hover ring-1 ring-primary-50 w-full max-w-md p-6 z-10">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="font-bold text-gray-800">Detail Transaksi</h3>
-          <button @click="selectedTrx = null" class="p-1 rounded-lg hover:bg-gray-100">
+          <h3 class="font-display font-extrabold tracking-tight text-gray-800">Detail Transaksi</h3>
+          <button @click="selectedTrx = null" class="p-1 rounded-lg hover:bg-primary-50">
             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>

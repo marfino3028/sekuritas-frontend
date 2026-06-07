@@ -1,6 +1,6 @@
 <template>
   <span
-    class="inline-flex items-center gap-1 font-medium rounded-full"
+    class="inline-flex items-center gap-1.5 font-semibold rounded-full ring-1 ring-inset ring-black/5 tracking-tight"
     :class="[sizeClass, colorClass]"
   >
     <span v-if="showDot" class="w-1.5 h-1.5 rounded-full" :class="dotClass"></span>
@@ -32,14 +32,14 @@ type StatusConfig = { color: string; dot: string; label: string }
 const statusMap: Record<string, StatusConfig> = {
   // KYC statuses
   pending: { color: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400', label: 'Belum KYC' },
-  submitted: { color: 'bg-yellow-100 text-yellow-700', dot: 'bg-yellow-500', label: 'Menunggu Verifikasi' },
+  submitted: { color: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500', label: 'Menunggu Verifikasi' },
   approved: { color: 'bg-green-100 text-green-700', dot: 'bg-green-500', label: 'Terverifikasi' },
   rejected: { color: 'bg-red-100 text-red-600', dot: 'bg-red-500', label: 'Ditolak' },
 
   // Transaction statuses
-  waiting_payment: { color: 'bg-orange-100 text-orange-700', dot: 'bg-orange-500', label: 'Menunggu Bayar' },
-  waiting_confirm: { color: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500', label: 'Diproses' },
-  approve: { color: 'bg-teal-100 text-teal-700', dot: 'bg-teal-500', label: 'Disetujui' },
+  waiting_payment: { color: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500', label: 'Menunggu Bayar' },
+  waiting_confirm: { color: 'bg-primary-100 text-primary-700', dot: 'bg-primary-500', label: 'Diproses' },
+  approve: { color: 'bg-accent-100 text-accent-700', dot: 'bg-accent-500', label: 'Disetujui' },
   completed: { color: 'bg-green-100 text-green-700', dot: 'bg-green-500', label: 'Selesai' },
   cancelled: { color: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400', label: 'Dibatalkan' },
   failed: { color: 'bg-red-100 text-red-600', dot: 'bg-red-500', label: 'Gagal' },

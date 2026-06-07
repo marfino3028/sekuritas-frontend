@@ -1,10 +1,10 @@
 <template>
   <div class="flex items-center justify-center" :class="containerClass">
     <div
-      class="rounded-full border-2 border-gray-200 animate-spin flex-shrink-0"
-      :class="[spinnerSize, 'border-t-teal-600']"
+      class="rounded-full border-2 border-primary-100 animate-spin flex-shrink-0"
+      :class="[spinnerSize, 'border-t-primary-600']"
     ></div>
-    <span v-if="text" class="ml-2 text-sm text-gray-500">{{ text }}</span>
+    <span v-if="text" class="ml-3 text-sm font-medium text-primary-700/80">{{ text }}</span>
   </div>
 </template>
 

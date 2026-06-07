@@ -1,7 +1,7 @@
 <template>
-  <div class="p-4 lg:p-6 max-w-3xl mx-auto">
+  <div class="p-4 lg:p-8 max-w-3xl mx-auto">
     <!-- Back button -->
-    <NuxtLink to="/produk" class="flex items-center gap-1 text-sm text-gray-500 hover:text-teal-600 mb-4 transition-colors">
+    <NuxtLink to="/produk" class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700 mb-6 transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
@@ -9,85 +9,79 @@
     </NuxtLink>
 
     <!-- Loading -->
-    <div v-if="loading" class="space-y-4">
-      <div class="bg-white rounded-2xl p-6 animate-pulse">
+    <div v-if="loading" class="space-y-5">
+      <div class="bg-white rounded-card shadow-card border border-slate-100 p-6 animate-pulse">
         <div class="flex gap-4 mb-4">
-          <div class="w-14 h-14 bg-gray-200 rounded-2xl"></div>
+          <div class="w-16 h-16 bg-slate-200 rounded-2xl"></div>
           <div class="flex-1">
-            <div class="h-5 bg-gray-200 rounded w-2/3 mb-2"></div>
-            <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-5 bg-slate-200 rounded w-2/3 mb-2"></div>
+            <div class="h-3 bg-slate-200 rounded w-1/2"></div>
           </div>
         </div>
-        <div class="h-32 bg-gray-200 rounded-xl"></div>
+        <div class="h-32 bg-slate-200 rounded-xl"></div>
       </div>
     </div>
 
-    <div v-else-if="fund">
-      <!-- Fund header card -->
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-card p-5 mb-4">
-        <div class="flex items-start gap-4">
+    <div v-else-if="fund" class="space-y-5">
+      <!-- Fund hero card (indigo gradient, asymmetric) -->
+      <div class="relative overflow-hidden rounded-card bg-brand-gradient shadow-card p-6 text-white">
+        <!-- soft gradient orbs -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -left-8 w-44 h-44 rounded-full bg-accent-400/30 blur-3xl pointer-events-none"></div>
+
+        <div class="relative flex items-start gap-4">
           <div
-            class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
-            :style="{ backgroundColor: fundColor }"
+            class="w-16 h-16 rounded-2xl flex items-center justify-center text-primary-700 bg-white font-extrabold text-2xl flex-shrink-0 shadow-lg"
           >
             {{ fund.name?.charAt(0) }}
           </div>
           <div class="flex-1 min-w-0">
-            <h1 class="text-lg font-bold text-gray-800 leading-tight">{{ fund.name }}</h1>
-            <p class="text-sm text-gray-500">{{ fund.manager }}</p>
-            <div class="flex items-center gap-2 mt-2">
-              <span class="px-2 py-0.5 rounded-full text-xs font-medium"
-                :class="{
-                  'bg-blue-100 text-blue-700': fund.type?.includes('Pasar Uang'),
-                  'bg-teal-100 text-teal-700': fund.type?.includes('Pendapatan Tetap'),
-                  'bg-orange-100 text-orange-700': fund.type?.includes('Campuran'),
-                  'bg-green-100 text-green-700': fund.type?.includes('Saham'),
-                  'bg-purple-100 text-purple-700': fund.is_syariah,
-                }">
+            <h1 class="font-display font-extrabold tracking-tight text-2xl leading-tight">{{ fund.name }}</h1>
+            <p class="text-sm text-white/70 mt-0.5">{{ fund.manager }}</p>
+            <div class="flex flex-wrap items-center gap-2 mt-3">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-white backdrop-blur">
                 {{ fund.type }}
               </span>
-              <span v-if="fund.is_syariah" class="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+              <span v-if="fund.is_syariah" class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                 Syariah
               </span>
-              <span v-if="fund.is_index" class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+              <span v-if="fund.is_index" class="px-3 py-1 bg-accent-100 text-accent-700 rounded-full text-xs font-semibold">
                 Indeks
               </span>
             </div>
           </div>
         </div>
 
-        <!-- NAV -->
-        <div class="mt-4 p-4 bg-gray-50 rounded-xl">
-          <div class="grid grid-cols-3 gap-3">
-            <div>
-              <p class="text-xs text-gray-500 mb-0.5">NAV/unit</p>
-              <p class="text-lg font-bold text-gray-800">{{ formatIDR(fund.nav) }}</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-500 mb-0.5">Return 1 Tahun</p>
-              <p class="text-lg font-bold" :class="fund.return_1y >= 0 ? 'text-green-600' : 'text-red-500'">
-                {{ fund.return_1y >= 0 ? '+' : '' }}{{ fund.return_1y?.toFixed(2) }}%
-              </p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-500 mb-0.5">Dana Kelolaan</p>
-              <p class="text-lg font-bold text-gray-800">{{ formatAUM(fund.aum) }}</p>
-            </div>
+        <!-- NAV pill stats -->
+        <div class="relative mt-6 grid grid-cols-3 gap-3">
+          <div class="rounded-2xl bg-white/10 backdrop-blur p-4">
+            <p class="text-xs text-white/60 mb-1">NAV/unit</p>
+            <p class="text-lg font-bold">{{ formatIDR(fund.nav) }}</p>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur p-4">
+            <p class="text-xs text-white/60 mb-1">Return 1 Tahun</p>
+            <p class="text-lg font-bold" :class="fund.return_1y >= 0 ? 'text-green-300' : 'text-red-300'">
+              {{ fund.return_1y >= 0 ? '+' : '' }}{{ fund.return_1y?.toFixed(2) }}%
+            </p>
+          </div>
+          <div class="rounded-2xl bg-white/10 backdrop-blur p-4">
+            <p class="text-xs text-white/60 mb-1">Dana Kelolaan</p>
+            <p class="text-lg font-bold">{{ formatAUM(fund.aum) }}</p>
           </div>
         </div>
       </div>
 
       <!-- NAV Chart (simple SVG line chart) -->
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-card p-5 mb-4">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="font-semibold text-gray-800">Grafik NAV</h2>
-          <div class="flex gap-1">
+      <div class="bg-white rounded-card border border-slate-100 shadow-card p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="font-display font-extrabold tracking-tight text-lg text-slate-800">Grafik NAV</h2>
+          <div class="flex flex-wrap gap-1.5">
             <button
               v-for="period in chartPeriods"
               :key="period"
               @click="selectedPeriod = period"
-              class="px-3 py-1 text-xs font-medium rounded-lg transition-colors"
-              :class="selectedPeriod === period ? 'bg-teal-600 text-white' : 'text-gray-500 hover:bg-gray-100'"
+              class="px-3 py-1 text-xs font-semibold rounded-xl transition-all"
+              :class="selectedPeriod === period ? 'bg-primary-600 text-white shadow-card' : 'text-slate-500 hover:bg-primary-50'"
             >
               {{ period }}
             </button>
@@ -99,28 +93,32 @@
           <svg class="w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#009688" stop-opacity="0.15" />
-                <stop offset="100%" stop-color="#009688" stop-opacity="0" />
+                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="chartLine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#4f46e5" />
+                <stop offset="100%" stop-color="#8b5cf6" />
               </linearGradient>
             </defs>
             <path :d="chartAreaPath" fill="url(#chartGrad)" />
-            <path :d="chartLinePath" fill="none" stroke="#009688" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path :d="chartLinePath" fill="none" stroke="url(#chartLine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           <!-- Y-axis labels -->
           <div class="absolute left-0 top-0 h-full flex flex-col justify-between pointer-events-none">
-            <span class="text-xs text-gray-400">{{ maxChartVal }}</span>
-            <span class="text-xs text-gray-400">{{ minChartVal }}</span>
+            <span class="text-xs text-slate-400">{{ maxChartVal }}</span>
+            <span class="text-xs text-slate-400">{{ minChartVal }}</span>
           </div>
         </div>
       </div>
 
       <!-- Performance table -->
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-card p-5 mb-4">
-        <h2 class="font-semibold text-gray-800 mb-4">Kinerja</h2>
-        <div class="space-y-3">
-          <div v-for="perf in performanceData" :key="perf.label" class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-            <span class="text-sm text-gray-600">{{ perf.label }}</span>
-            <span class="text-sm font-semibold" :class="perf.value >= 0 ? 'text-green-600' : 'text-red-500'">
+      <div class="bg-white rounded-card border border-slate-100 shadow-card p-6">
+        <h2 class="font-display font-extrabold tracking-tight text-lg text-slate-800 mb-5">Kinerja</h2>
+        <div class="space-y-1">
+          <div v-for="perf in performanceData" :key="perf.label" class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
+            <span class="text-sm text-slate-600">{{ perf.label }}</span>
+            <span class="text-sm font-bold" :class="perf.value >= 0 ? 'text-green-600' : 'text-red-500'">
               {{ perf.value >= 0 ? '+' : '' }}{{ perf.value?.toFixed(2) }}%
             </span>
           </div>
@@ -128,12 +126,12 @@
       </div>
 
       <!-- Fund info -->
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-card p-5 mb-4">
-        <h2 class="font-semibold text-gray-800 mb-4">Informasi Produk</h2>
-        <div class="space-y-3">
-          <div v-for="info in fundInfo" :key="info.label" class="flex justify-between py-1.5 border-b border-gray-100 last:border-0">
-            <span class="text-sm text-gray-500">{{ info.label }}</span>
-            <span class="text-sm font-medium text-gray-800 text-right">{{ info.value }}</span>
+      <div class="bg-white rounded-card border border-slate-100 shadow-card p-6">
+        <h2 class="font-display font-extrabold tracking-tight text-lg text-slate-800 mb-5">Informasi Produk</h2>
+        <div class="space-y-1">
+          <div v-for="info in fundInfo" :key="info.label" class="flex justify-between py-2 border-b border-slate-100 last:border-0">
+            <span class="text-sm text-slate-500">{{ info.label }}</span>
+            <span class="text-sm font-semibold text-slate-800 text-right">{{ info.value }}</span>
           </div>
         </div>
       </div>
@@ -141,30 +139,30 @@
       <!-- KYC warning -->
       <div
         v-if="!authStore.isKycApproved"
-        class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4"
+        class="bg-amber-50 border border-amber-200 rounded-card p-5"
       >
         <div class="flex items-start gap-3">
-          <svg class="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
           <div>
-            <p class="text-sm font-semibold text-yellow-800">Verifikasi KYC diperlukan</p>
-            <p class="text-xs text-yellow-700 mt-0.5">Lengkapi verifikasi KYC terlebih dahulu untuk melakukan transaksi.</p>
+            <p class="text-sm font-semibold text-amber-800">Verifikasi KYC diperlukan</p>
+            <p class="text-xs text-amber-700 mt-0.5">Lengkapi verifikasi KYC terlebih dahulu untuk melakukan transaksi.</p>
           </div>
         </div>
       </div>
 
       <!-- Action buttons -->
-      <div class="flex gap-3 sticky bottom-20 lg:bottom-4 bg-white/90 backdrop-blur rounded-2xl p-3 border border-gray-100 shadow-lg">
+      <div class="flex gap-3 sticky bottom-20 lg:bottom-4 bg-white/90 backdrop-blur rounded-card p-3 border border-slate-100 shadow-card-hover">
         <button
           @click="handleSell"
-          class="flex-1 py-3 rounded-xl font-semibold text-sm border-2 border-teal-600 text-teal-600 hover:bg-teal-50 transition-colors"
+          class="flex-1 py-3 rounded-xl font-semibold text-sm border-2 border-accent-500 text-accent-600 hover:bg-accent-50 transition-all"
         >
           Jual
         </button>
         <button
           @click="handleBuy"
-          class="flex-1 py-3 rounded-xl font-semibold text-sm bg-teal-600 text-white hover:bg-teal-700 transition-colors"
+          class="flex-1 py-3 rounded-xl font-semibold text-sm bg-primary-600 text-white hover:bg-primary-700 hover:-translate-y-0.5 transition-all shadow-card"
         >
           Beli
         </button>
@@ -173,8 +171,8 @@
 
     <!-- Not found -->
     <div v-else class="text-center py-16">
-      <p class="text-gray-500">Produk tidak ditemukan</p>
-      <NuxtLink to="/produk" class="text-teal-600 text-sm font-medium hover:underline mt-2 block">
+      <p class="text-slate-500">Produk tidak ditemukan</p>
+      <NuxtLink to="/produk" class="text-primary-600 text-sm font-medium hover:underline mt-2 block">
         Kembali ke daftar reksa dana
       </NuxtLink>
     </div>
@@ -194,7 +192,7 @@ const fund = ref<any>(null)
 const selectedPeriod = ref('1T')
 const chartPeriods = ['1B', '3B', '6B', 'YTD', '1T', '3T']
 
-const fundColor = '#009688'
+const fundColor = '#4f46e5'
 
 const formatIDR = (v: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(v)
 

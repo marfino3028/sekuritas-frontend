@@ -1,71 +1,83 @@
 <template>
-  <div class="p-4 lg:p-6">
-    <!-- Header -->
-    <div class="mb-4">
-      <h1 class="text-2xl font-bold text-gray-800">Reksa Dana</h1>
-      <p class="text-gray-500 text-sm mt-0.5">Temukan produk investasi yang tepat untuk Anda</p>
+  <div class="p-4 lg:p-8">
+    <!-- Hero -->
+    <div class="relative overflow-hidden bg-brand-gradient rounded-card shadow-card p-6 lg:p-10 mb-8">
+      <!-- soft gradient orbs -->
+      <div class="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-accent-400/30 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -left-12 w-64 h-64 rounded-full bg-primary-400/30 blur-3xl pointer-events-none"></div>
+
+      <div class="relative max-w-2xl">
+        <h1 class="font-display font-extrabold tracking-tight text-3xl lg:text-4xl text-white">Reksa Dana</h1>
+        <p class="text-primary-100 text-sm lg:text-base mt-2">Temukan produk investasi yang tepat untuk Anda</p>
+
+        <!-- stat pills -->
+        <div class="flex flex-wrap gap-2 mt-5">
+          <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-white/15 text-white text-xs font-semibold backdrop-blur">Mulai dari Rp10.000</span>
+          <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-white/15 text-white text-xs font-semibold backdrop-blur">Terdaftar &amp; Diawasi OJK</span>
+        </div>
+      </div>
     </div>
 
     <!-- Search -->
-    <div class="relative mb-4">
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="relative mb-5 max-w-xl">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
       </svg>
       <input
         v-model="searchQuery"
         type="text"
         placeholder="Cari nama reksa dana..."
-        class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
+        class="w-full pl-11 pr-4 py-3 border border-slate-100 ring-1 ring-primary-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white shadow-card"
       />
     </div>
 
     <!-- Filter chips -->
-    <div class="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-hide">
+    <div class="flex gap-2 overflow-x-auto pb-2 mb-5 scrollbar-hide">
       <button
         v-for="filter in filters"
         :key="filter.key"
         @click="toggleFilter(filter.key)"
-        class="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors"
+        class="flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all"
         :class="activeFilters.includes(filter.key)
-          ? 'bg-teal-600 border-teal-600 text-white'
-          : 'bg-white border-gray-200 text-gray-600 hover:border-teal-400'"
+          ? 'bg-primary-600 border-primary-600 text-white shadow-card'
+          : 'bg-white border-slate-100 text-primary-700 hover:border-accent-400 hover:text-accent-600'"
       >
         {{ filter.label }}
       </button>
     </div>
 
     <!-- Fund type tabs -->
-    <div class="flex border-b border-gray-200 mb-4">
+    <div class="flex gap-2 mb-6">
       <button
         v-for="tab in fundTabs"
         :key="tab.key"
         @click="activeTab = tab.key"
-        class="px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px"
+        class="px-5 py-2 text-sm font-semibold rounded-xl transition-all"
         :class="activeTab === tab.key
-          ? 'border-teal-600 text-teal-700'
-          : 'border-transparent text-gray-500 hover:text-gray-700'"
+          ? 'bg-accent-100 text-accent-700'
+          : 'text-gray-500 hover:text-primary-700 hover:bg-primary-50'"
       >
         {{ tab.label }}
       </button>
     </div>
 
     <!-- Loading state -->
-    <div v-if="loading" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div v-for="i in 6" :key="i" class="bg-white rounded-2xl border border-gray-100 p-4 animate-pulse">
+    <div v-if="loading" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div v-for="i in 6" :key="i" class="bg-white rounded-card border border-slate-100 shadow-card p-6 animate-pulse">
         <div class="flex gap-3 mb-4">
-          <div class="w-10 h-10 bg-gray-200 rounded-xl"></div>
+          <div class="w-10 h-10 bg-primary-100 rounded-xl"></div>
           <div class="flex-1">
-            <div class="h-4 bg-gray-200 rounded w-3/4 mb-1"></div>
-            <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-4 bg-slate-100 rounded w-3/4 mb-1"></div>
+            <div class="h-3 bg-slate-100 rounded w-1/2"></div>
           </div>
         </div>
-        <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
-        <div class="h-8 bg-gray-200 rounded"></div>
+        <div class="h-3 bg-slate-100 rounded w-full mb-2"></div>
+        <div class="h-8 bg-slate-100 rounded"></div>
       </div>
     </div>
 
     <!-- Fund cards -->
-    <div v-else-if="filteredFunds.length" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div v-else-if="filteredFunds.length" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <FundCard
         v-for="fund in filteredFunds"
         :key="fund.id"
@@ -76,8 +88,8 @@
 
     <!-- Empty state -->
     <div v-else class="text-center py-16">
-      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
