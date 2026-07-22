@@ -14,7 +14,7 @@
             </svg>
           </div>
           <h1 class="font-display text-3xl font-extrabold tracking-tight text-primary-900">Masuk ke Akun</h1>
-          <p class="text-slate-500 text-sm mt-2">Selamat datang kembali di Sekuritas</p>
+          <p class="text-slate-500 text-sm mt-2">Selamat datang kembali di Victoria Sekuritas</p>
         </div>
 
         <!-- Step 1: Phone input -->

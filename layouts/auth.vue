@@ -17,7 +17,7 @@
           </svg>
         </div>
         <div>
-          <p class="text-[18px] font-display font-extrabold text-white tracking-tight leading-none">Sekuritas</p>
+          <p class="text-[18px] font-display font-extrabold text-white tracking-tight leading-none">Victoria Sekuritas</p>
           <p class="text-[11px] font-medium leading-none mt-1 text-accent-100">Demo Platform</p>
         </div>
       </NuxtLink>
@@ -36,7 +36,7 @@
         Berizin dan Diawasi oleh <span class="font-semibold text-accent-100">OJK</span>
       </p>
       <p class="text-xs mt-1 text-white/40">
-        &copy; {{ new Date().getFullYear() }} PT Sekuritas Indonesia. Hak Cipta Dilindungi.
+        &copy; {{ new Date().getFullYear() }} PT Victoria Sekuritas Indonesia. Hak Cipta Dilindungi.
       </p>
     </footer>
   </div>

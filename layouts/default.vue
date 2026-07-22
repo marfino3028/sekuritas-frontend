@@ -15,7 +15,7 @@
             </svg>
           </div>
           <div>
-            <p class="text-white font-display font-extrabold text-[17px] tracking-tight leading-none">Sekuritas</p>
+            <p class="text-white font-display font-extrabold text-[17px] tracking-tight leading-none">Victoria Sekuritas</p>
             <p class="text-[11px] font-medium leading-none mt-1 text-accent-200">Reksa Dana</p>
           </div>
         </div>
@@ -113,7 +113,7 @@
               </svg>
             </div>
             <div>
-              <p class="text-white font-display font-extrabold text-base tracking-tight leading-none">Sekuritas</p>
+              <p class="text-white font-display font-extrabold text-base tracking-tight leading-none">Victoria Sekuritas</p>
               <p class="text-xs font-medium leading-none mt-1 text-accent-200">Reksa Dana</p>
             </div>
           </div>

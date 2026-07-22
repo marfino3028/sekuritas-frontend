@@ -9,7 +9,7 @@
               <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
             </svg>
           </div>
-          <span class="text-xl font-display font-extrabold tracking-tight text-slate-900">Sekuritas</span>
+          <span class="text-xl font-display font-extrabold tracking-tight text-slate-900">Victoria Sekuritas</span>
         </div>
         <div class="flex items-center gap-3">
           <NuxtLink to="/login" class="text-sm font-semibold text-primary-700 hover:text-primary-800 transition-colors">
@@ -112,7 +112,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="max-w-2xl mb-14">
           <span class="text-accent-600 font-semibold text-sm uppercase tracking-wider">Keunggulan</span>
-          <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-4">Kenapa Memilih Sekuritas?</h2>
+          <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-4">Kenapa Memilih Victoria Sekuritas?</h2>
           <p class="text-slate-500 text-lg">Platform investasi reksa dana modern yang aman, transparan, dan mudah digunakan.</p>
         </div>
 
@@ -275,7 +275,7 @@
                   <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                 </svg>
               </div>
-              <span class="text-white font-display font-extrabold tracking-tight">Sekuritas</span>
+              <span class="text-white font-display font-extrabold tracking-tight">Victoria Sekuritas</span>
             </div>
             <p class="text-sm text-primary-300/70">Platform investasi reksa dana terpercaya, berizin dan diawasi OJK.</p>
           </div>
@@ -305,7 +305,7 @@
           </div>
         </div>
         <div class="border-t border-white/10 pt-6 text-center text-xs text-primary-300/60">
-          &copy; {{ new Date().getFullYear() }} PT Sekuritas Indonesia. Berizin dan Diawasi OJK.
+          &copy; {{ new Date().getFullYear() }} PT Victoria Sekuritas Indonesia. Berizin dan Diawasi OJK.
           Investasi mengandung risiko. Kinerja masa lalu tidak menjamin kinerja masa depan.
         </div>
       </div>

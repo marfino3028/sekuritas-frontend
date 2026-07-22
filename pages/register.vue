@@ -73,7 +73,7 @@
                 <a href="#" class="text-primary-600 font-semibold hover:underline">Syarat & Ketentuan</a>
                 dan
                 <a href="#" class="text-primary-600 font-semibold hover:underline">Kebijakan Privasi</a>
-                PT Sekuritas Indonesia
+                PT Victoria Sekuritas Indonesia
               </span>
             </label>
           </div>

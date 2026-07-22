@@ -115,7 +115,7 @@
     </button>
 
     <!-- App version -->
-    <p class="text-center text-xs text-slate-400 mt-8">Sekuritas v1.0.0 • Berizin dan Diawasi OJK</p>
+    <p class="text-center text-xs text-slate-400 mt-8">Victoria Sekuritas v1.0.0 • Berizin dan Diawasi OJK</p>
 
     <!-- Logout confirmation modal -->
     <div v-if="confirmLogout" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="confirmLogout = false">

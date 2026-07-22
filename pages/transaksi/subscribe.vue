@@ -45,7 +45,7 @@
           <div class="bg-slate-50 rounded-xl p-4">
             <p class="text-xs text-slate-500 mb-1">Transfer ke Rekening</p>
             <p class="font-bold text-slate-900">BCA - 8127-0000-1234</p>
-            <p class="text-sm text-slate-600">a/n PT Sekuritas Indonesia</p>
+            <p class="text-sm text-slate-600">a/n PT Victoria Sekuritas Indonesia</p>
           </div>
           <div class="flex justify-between">
             <span class="text-sm text-slate-500">Jumlah Transfer</span>
@@ -237,7 +237,7 @@ const quickAmounts = [100000, 500000, 1000000, 5000000]
 
 const paymentMethods = [
   { value: 'va', label: 'Virtual Account', desc: 'Transfer via VA BCA, BNI, BRI, Mandiri' },
-  { value: 'transfer', label: 'Transfer Bank', desc: 'Transfer langsung ke rekening PT Sekuritas' },
+  { value: 'transfer', label: 'Transfer Bank', desc: 'Transfer langsung ke rekening PT Victoria Sekuritas' },
 ]
 
 const buyFee = computed(() => form.amount * ((fund.value?.buy_fee || 0) / 100))
