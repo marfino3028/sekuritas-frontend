@@ -279,7 +279,26 @@ const fatca = [
   'U.S Indicia lainnya',
 ]
 
-onMounted(() => { if (!authStore.token) router.push('/login') })
+onMounted(() => {
+  if (!authStore.token) { router.push('/login'); return }
+  // Auto-isi dari hasil OCR KTP di langkah eKYC
+  if (process.client) {
+    try {
+      const raw = localStorage.getItem('ktp_ocr')
+      if (raw) {
+        const o = JSON.parse(raw)
+        if (o.nik) f.value.nik = o.nik
+        if (o.birth_date) f.value.birth_date = o.birth_date
+        if (o.gender) f.value.gender = o.gender
+        if (o.marital_status) f.value.marital_status = o.marital_status
+        // Alamat lengkap: gabung alamat + RT/RW + kel + kecamatan bila ada
+        const parts = [o.address, o.rt_rw ? `RT/RW ${o.rt_rw}` : '', o.village ? `Kel. ${o.village}` : '', o.district ? `Kec. ${o.district}` : '']
+          .filter(Boolean)
+        if (parts.length) f.value.address = parts.join(', ')
+      }
+    } catch { /* ignore */ }
+  }
+})
 
 const stepValid = computed(() => {
   if (step.value === 1) return f.value.nik.length === 16 && f.value.mother_maiden_name && f.value.birth_date && f.value.gender && f.value.marital_status && f.value.education && f.value.address && f.value.province && f.value.city

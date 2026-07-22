@@ -28,20 +28,50 @@
       <div v-if="step === 1">
         <h2 class="text-xl font-display font-extrabold text-slate-800 mb-1">Foto e-KTP</h2>
         <p class="text-sm text-slate-500 mb-5">Ambil foto KTP asli dengan jelas. Sistem akan membaca data secara otomatis (OCR).</p>
-        <label class="block border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition"
-               :class="ktpFile ? 'border-primary-400 bg-primary-50' : 'border-slate-300 hover:border-primary-400'">
-          <img v-if="ktpPreview" :src="ktpPreview" class="max-h-48 mx-auto rounded-lg" alt="KTP" />
-          <p v-else class="text-sm text-slate-600">Klik untuk ambil / pilih foto KTP</p>
-          <input type="file" accept="image/*" capture="environment" class="hidden" @change="onFile($event, 'ktp')" />
-        </label>
+        <!-- Kamera live -->
+        <div v-if="cameraFor === 'ktp'" class="rounded-xl overflow-hidden bg-black">
+          <video ref="videoEl" autoplay playsinline class="w-full max-h-72 object-contain bg-black"></video>
+          <div class="flex gap-2 p-3 bg-slate-900">
+            <button class="flex-1 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-lg" @click="capture('ktp')">📸 Ambil Foto</button>
+            <button class="px-4 py-2.5 bg-white/10 text-white text-sm rounded-lg" @click="closeCamera">Batal</button>
+          </div>
+        </div>
+        <!-- Preview -->
+        <div v-else-if="ktpPreview" class="border-2 border-primary-400 bg-primary-50 rounded-xl p-4 text-center">
+          <img :src="ktpPreview" class="max-h-48 mx-auto rounded-lg" alt="KTP" />
+          <button class="mt-2 text-xs text-slate-500 hover:text-slate-700" @click="ktpFile = null; ktpPreview = ''">Ganti foto</button>
+        </div>
+        <!-- Pilihan: Upload / Kamera -->
+        <div v-else class="grid grid-cols-2 gap-3">
+          <button class="flex flex-col items-center gap-2 py-6 border-2 border-dashed border-slate-300 rounded-xl hover:border-primary-400 transition" @click="ktpInput?.click()">
+            <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span class="text-sm font-semibold text-slate-700">Upload File</span>
+          </button>
+          <button class="flex flex-col items-center gap-2 py-6 border-2 border-dashed border-slate-300 rounded-xl hover:border-primary-400 transition" @click="openCamera('ktp', 'environment')">
+            <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="text-sm font-semibold text-slate-700">Buka Kamera</span>
+          </button>
+          <input ref="ktpInput" type="file" accept="image/*" class="hidden" @change="onFile($event, 'ktp')" />
+        </div>
         <p v-if="ocrScanning" class="mt-3 text-sm text-primary-600 flex items-center gap-2">
           <span class="inline-block w-3 h-3 border-2 border-primary-300 border-t-primary-600 rounded-full animate-spin"></span>
           Membaca KTP (OCR on-device)…
         </p>
         <div v-if="localOcr && (localOcr.nik || localOcr.name)" class="mt-4 text-sm bg-primary-50 rounded-xl p-4">
-          <p class="font-semibold text-primary-700 mb-1">Data terbaca otomatis</p>
-          <p class="text-primary-600">NIK: <b>{{ localOcr.nik || '—' }}</b> · Nama: <b>{{ localOcr.name || '—' }}</b></p>
-          <p class="text-xs text-primary-400 mt-1">Diproses gratis di perangkat Anda (Tesseract). Bisa dikoreksi di langkah berikutnya.</p>
+          <p class="font-semibold text-primary-700 mb-2">Data terbaca otomatis</p>
+          <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-primary-700">
+            <span class="text-primary-400">NIK</span><b>{{ localOcr.nik || '—' }}</b>
+            <span class="text-primary-400">Nama</span><b>{{ localOcr.name || '—' }}</b>
+            <span class="text-primary-400">TTL</span><b>{{ [localOcr.birth_place, localOcr.birth_date].filter(Boolean).join(', ') || '—' }}</b>
+            <span class="text-primary-400">Kelamin</span><b>{{ localOcr.gender === 'F' ? 'Perempuan' : localOcr.gender === 'M' ? 'Laki-laki' : '—' }}</b>
+            <span class="text-primary-400">Alamat</span><b>{{ localOcr.address || '—' }}</b>
+            <span class="text-primary-400">RT/RW</span><b>{{ localOcr.rt_rw || '—' }}</b>
+            <span class="text-primary-400">Kel/Kec</span><b>{{ [localOcr.village, localOcr.district].filter(Boolean).join(' / ') || '—' }}</b>
+            <span class="text-primary-400">Agama</span><b>{{ localOcr.religion || '—' }}</b>
+            <span class="text-primary-400">Status</span><b>{{ localOcr.marital_status || '—' }}</b>
+            <span class="text-primary-400">Pekerjaan</span><b>{{ localOcr.occupation || '—' }}</b>
+          </div>
+          <p class="text-xs text-primary-400 mt-2">Diproses gratis di perangkat Anda (Tesseract). Data otomatis mengisi form berikutnya — bisa dikoreksi.</p>
         </div>
         <div v-if="ocrResult" class="mt-3 text-sm bg-slate-50 rounded-xl p-4">
           <p class="text-slate-500">Verifikasi server — Confidence: <b>{{ ocrResult.ocr_confidence }}%</b></p>
@@ -52,12 +82,29 @@
       <div v-else-if="step === 2">
         <h2 class="text-xl font-display font-extrabold text-slate-800 mb-1">Selfie (Liveness)</h2>
         <p class="text-sm text-slate-500 mb-5">Ambil foto wajah Anda menghadap kamera. Digunakan untuk deteksi wajah asli & pencocokan dengan KTP.</p>
-        <label class="block border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition"
-               :class="selfieFile ? 'border-primary-400 bg-primary-50' : 'border-slate-300 hover:border-primary-400'">
-          <img v-if="selfiePreview" :src="selfiePreview" class="max-h-48 mx-auto rounded-lg" alt="Selfie" />
-          <p v-else class="text-sm text-slate-600">Klik untuk ambil selfie</p>
-          <input type="file" accept="image/*" capture="user" class="hidden" @change="onFile($event, 'selfie')" />
-        </label>
+        <!-- Kamera live -->
+        <div v-if="cameraFor === 'selfie'" class="rounded-xl overflow-hidden bg-black">
+          <video ref="videoEl" autoplay playsinline class="w-full max-h-72 object-contain bg-black" style="transform: scaleX(-1)"></video>
+          <div class="flex gap-2 p-3 bg-slate-900">
+            <button class="flex-1 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-lg" @click="capture('selfie')">📸 Ambil Foto</button>
+            <button class="px-4 py-2.5 bg-white/10 text-white text-sm rounded-lg" @click="closeCamera">Batal</button>
+          </div>
+        </div>
+        <div v-else-if="selfiePreview" class="border-2 border-primary-400 bg-primary-50 rounded-xl p-4 text-center">
+          <img :src="selfiePreview" class="max-h-48 mx-auto rounded-lg" alt="Selfie" />
+          <button class="mt-2 text-xs text-slate-500 hover:text-slate-700" @click="selfieFile = null; selfiePreview = ''">Ganti foto</button>
+        </div>
+        <div v-else class="grid grid-cols-2 gap-3">
+          <button class="flex flex-col items-center gap-2 py-6 border-2 border-dashed border-slate-300 rounded-xl hover:border-primary-400 transition" @click="selfieInput?.click()">
+            <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span class="text-sm font-semibold text-slate-700">Upload File</span>
+          </button>
+          <button class="flex flex-col items-center gap-2 py-6 border-2 border-dashed border-slate-300 rounded-xl hover:border-primary-400 transition" @click="openCamera('selfie', 'user')">
+            <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="text-sm font-semibold text-slate-700">Buka Kamera</span>
+          </button>
+          <input ref="selfieInput" type="file" accept="image/*" class="hidden" @change="onFile($event, 'selfie')" />
+        </div>
         <div v-if="livenessResult" class="mt-4 text-sm bg-slate-50 rounded-xl p-4">
           <p class="text-slate-500">Liveness: <b :class="livenessResult.liveness_passed ? 'text-emerald-600' : 'text-red-500'">{{ livenessResult.liveness_passed ? 'LOLOS' : 'GAGAL' }}</b> ({{ livenessResult.liveness_score }}%)</p>
           <p v-if="faceResult" class="text-slate-500 mt-1">Face Match: <b :class="faceResult.face_matched ? 'text-emerald-600' : 'text-red-500'">{{ faceResult.face_match_score }}%</b></p>
@@ -124,7 +171,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const ekyc = useEkyc()
 const ktpOcr = useKtpOcr()
@@ -151,6 +198,43 @@ const canvasEl = ref<HTMLCanvasElement | null>(null)
 let signaturePad: any = null   // instance signature_pad (szimek)
 const hasSignature = ref(false)
 
+// --- Upload / Kamera ---
+const ktpInput = ref<HTMLInputElement | null>(null)
+const selfieInput = ref<HTMLInputElement | null>(null)
+const videoEl = ref<HTMLVideoElement | null>(null)
+const cameraFor = ref<'ktp' | 'selfie' | null>(null)
+let mediaStream: MediaStream | null = null
+
+async function openCamera(which: 'ktp' | 'selfie', facing: 'environment' | 'user') {
+  error.value = ''
+  cameraFor.value = which
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing }, audio: false })
+    await nextTick()
+    if (videoEl.value) { videoEl.value.srcObject = mediaStream; await videoEl.value.play() }
+  } catch (e: any) {
+    cameraFor.value = null
+    error.value = 'Tidak bisa akses kamera. Izinkan kamera di browser, atau pakai Upload File.'
+  }
+}
+function closeCamera() {
+  mediaStream?.getTracks().forEach((t) => t.stop())
+  mediaStream = null
+  cameraFor.value = null
+}
+function capture(which: 'ktp' | 'selfie') {
+  const v = videoEl.value
+  if (!v) return
+  const canvas = document.createElement('canvas')
+  canvas.width = v.videoWidth || 1280
+  canvas.height = v.videoHeight || 720
+  canvas.getContext('2d')!.drawImage(v, 0, 0, canvas.width, canvas.height)
+  canvas.toBlob((blob) => {
+    if (blob) setImage(new File([blob], `${which}.jpg`, { type: 'image/jpeg' }), which)
+    closeCamera()
+  }, 'image/jpeg', 0.9)
+}
+
 const startSession = async () => {
   error.value = ''
   if (!authStore.token) { router.push('/login'); return }
@@ -168,6 +252,7 @@ const startSession = async () => {
   }
 }
 onMounted(startSession)
+onBeforeUnmount(closeCamera)
 
 const canNext = computed(() => {
   if (step.value === 1) return !!ktpFile.value
@@ -193,16 +278,22 @@ const decisionLabel = computed(() => ({
 
 function onFile(e: Event, type: 'ktp' | 'selfie') {
   const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file) return
+  if (file) setImage(file, type)
+}
+
+function setImage(file: File, type: 'ktp' | 'selfie') {
   const url = URL.createObjectURL(file)
   if (type === 'ktp') {
     ktpFile.value = file; ktpPreview.value = url
-    // OCR gratis on-device (non-blocking) untuk auto-isi NIK & Nama
+    // OCR gratis on-device → simpan SEMUA field untuk auto-isi form data
     ocrScanning.value = true
     localOcr.value = null
     ktpOcr.recognize(file)
-      .then((r) => { localOcr.value = { nik: r.nik, name: r.name } })
-      .catch(() => { /* OCR opsional; abaikan bila gagal/ dep belum terpasang */ })
+      .then((r) => {
+        localOcr.value = r
+        if (process.client) localStorage.setItem('ktp_ocr', JSON.stringify(r))
+      })
+      .catch(() => { /* OCR opsional */ })
       .finally(() => { ocrScanning.value = false })
   } else { selfieFile.value = file; selfiePreview.value = url }
 }
