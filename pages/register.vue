@@ -7,6 +7,11 @@
         <div class="pointer-events-none absolute -bottom-20 -left-12 w-40 h-40 rounded-full bg-accent-100 opacity-50 blur-2xl"></div>
 
         <div class="relative">
+        <!-- Badge promo/referral -->
+        <div v-if="refCode" class="mb-5 flex items-center gap-2 rounded-xl bg-primary-50 border border-primary-100 px-3 py-2.5 text-sm">
+          <span class="text-lg">🎁</span>
+          <span class="text-primary-700">Kamu datang dari promo <b class="font-semibold">{{ refCode }}</b> — benefit otomatis tercatat setelah daftar.</span>
+        </div>
         <!-- Step indicator -->
         <div class="flex items-center gap-2 mb-7">
           <div
@@ -219,6 +224,11 @@ definePageMeta({ middleware: 'guest', layout: false })
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+const { post } = useApi()
+
+// Kode promo/referral bila datang dari link /promo/[kode]
+const refCode = ref((route.query.ref as string) || '')
 
 const step = ref(1)
 const phone = ref('')
@@ -313,6 +323,10 @@ const doRegister = async () => {
   loading.value = true
   try {
     await authStore.register(phone.value, storedOtp.value, pinValue.value)
+    // Jika datang dari link promo, catat pendaftaran event (abaikan bila gagal)
+    if (refCode.value) {
+      try { await post('/events/register', { code: refCode.value }) } catch { /* non-blocking */ }
+    }
     router.push('/dashboard')
   } catch (e: any) {
     pinError.value = e?.data?.message || 'Gagal membuat akun'
