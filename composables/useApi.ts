@@ -85,22 +85,30 @@ export const useApi = () => {
   return { get, post, put, postFormData }
 }
 
+// API Laravel mengembalikan angka desimal sebagai STRING (mis. "18.67").
+// Coerce defensif agar helper aman dipakai pada string maupun number.
+const toNum = (v: unknown): number => {
+  const n = typeof v === 'number' ? v : parseFloat(String(v ?? ''))
+  return Number.isFinite(n) ? n : 0
+}
+
 // Helper to format IDR
-export const formatIDR = (amount: number): string => {
+export const formatIDR = (amount: number | string): string => {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount)
+  }).format(toNum(amount))
 }
 
 // Helper to format number with thousand separator
-export const formatNumber = (num: number): string => {
-  return num.toLocaleString('id-ID')
+export const formatNumber = (num: number | string): string => {
+  return toNum(num).toLocaleString('id-ID')
 }
 
 // Helper to format percentage
-export const formatPercent = (num: number, decimals = 2): string => {
-  return `${num >= 0 ? '+' : ''}${num.toFixed(decimals)}%`
+export const formatPercent = (num: number | string, decimals = 2): string => {
+  const n = toNum(num)
+  return `${n >= 0 ? '+' : ''}${n.toFixed(decimals)}%`
 }
