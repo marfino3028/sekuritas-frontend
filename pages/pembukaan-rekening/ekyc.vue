@@ -34,9 +34,17 @@
           <p v-else class="text-sm text-slate-600">Klik untuk ambil / pilih foto KTP</p>
           <input type="file" accept="image/*" capture="environment" class="hidden" @change="onFile($event, 'ktp')" />
         </label>
-        <div v-if="ocrResult" class="mt-4 text-sm bg-slate-50 rounded-xl p-4">
-          <p class="font-semibold text-slate-700 mb-1">Hasil OCR</p>
-          <p class="text-slate-500">Confidence: <b>{{ ocrResult.ocr_confidence }}%</b> · NIK: {{ ocrResult.nik || '—' }} · Nama: {{ ocrResult.name || '—' }}</p>
+        <p v-if="ocrScanning" class="mt-3 text-sm text-primary-600 flex items-center gap-2">
+          <span class="inline-block w-3 h-3 border-2 border-primary-300 border-t-primary-600 rounded-full animate-spin"></span>
+          Membaca KTP (OCR on-device)…
+        </p>
+        <div v-if="localOcr && (localOcr.nik || localOcr.name)" class="mt-4 text-sm bg-primary-50 rounded-xl p-4">
+          <p class="font-semibold text-primary-700 mb-1">Data terbaca otomatis</p>
+          <p class="text-primary-600">NIK: <b>{{ localOcr.nik || '—' }}</b> · Nama: <b>{{ localOcr.name || '—' }}</b></p>
+          <p class="text-xs text-primary-400 mt-1">Diproses gratis di perangkat Anda (Tesseract). Bisa dikoreksi di langkah berikutnya.</p>
+        </div>
+        <div v-if="ocrResult" class="mt-3 text-sm bg-slate-50 rounded-xl p-4">
+          <p class="text-slate-500">Verifikasi server — Confidence: <b>{{ ocrResult.ocr_confidence }}%</b></p>
         </div>
       </div>
 
@@ -120,6 +128,7 @@
 import { ref, computed, onMounted } from 'vue'
 
 const ekyc = useEkyc()
+const ktpOcr = useKtpOcr()
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -133,6 +142,8 @@ const ktpPreview = ref('')
 const selfieFile = ref<File | null>(null)
 const selfiePreview = ref('')
 const ocrResult = ref<any>(null)
+const localOcr = ref<{ nik: string | null; name: string | null } | null>(null)
+const ocrScanning = ref(false)
 const livenessResult = ref<any>(null)
 const faceResult = ref<any>(null)
 const verifyResult = ref<any>(null)
@@ -177,8 +188,16 @@ function onFile(e: Event, type: 'ktp' | 'selfie') {
   const file = (e.target as HTMLInputElement).files?.[0]
   if (!file) return
   const url = URL.createObjectURL(file)
-  if (type === 'ktp') { ktpFile.value = file; ktpPreview.value = url }
-  else { selfieFile.value = file; selfiePreview.value = url }
+  if (type === 'ktp') {
+    ktpFile.value = file; ktpPreview.value = url
+    // OCR gratis on-device (non-blocking) untuk auto-isi NIK & Nama
+    ocrScanning.value = true
+    localOcr.value = null
+    ktpOcr.recognize(file)
+      .then((r) => { localOcr.value = { nik: r.nik, name: r.name } })
+      .catch(() => { /* OCR opsional; abaikan bila gagal/ dep belum terpasang */ })
+      .finally(() => { ocrScanning.value = false })
+  } else { selfieFile.value = file; selfiePreview.value = url }
 }
 
 async function next() {
@@ -186,7 +205,10 @@ async function next() {
   loading.value = true
   try {
     if (step.value === 1) {
-      ocrResult.value = (await ekyc.ocr(sessionId.value, ktpFile.value!)).ocr
+      const override: Record<string, string> = {}
+      if (localOcr.value?.nik) override.nik = localOcr.value.nik
+      if (localOcr.value?.name) override.name = localOcr.value.name
+      ocrResult.value = (await ekyc.ocr(sessionId.value, ktpFile.value!, override)).ocr
       step.value = 2
     } else if (step.value === 2) {
       const lv = await ekyc.liveness(sessionId.value, selfieFile.value!)
