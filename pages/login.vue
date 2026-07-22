@@ -1,174 +1,46 @@
 <template>
   <div>
     <NuxtLayout name="auth">
-      <div class="relative bg-white rounded-card shadow-card ring-1 ring-primary-50 border border-slate-100 p-6 sm:p-8 overflow-hidden">
-        <!-- Soft gradient orbs (asymmetric accents) -->
-        <div class="pointer-events-none absolute -top-16 -right-16 w-44 h-44 rounded-full bg-brand-gradient opacity-10 blur-2xl"></div>
-        <div class="pointer-events-none absolute -bottom-20 -left-12 w-40 h-40 rounded-full bg-accent-300 opacity-10 blur-2xl"></div>
+      <div class="relative bg-white rounded-card shadow-card ring-1 ring-primary-50 border border-slate-100 p-7 overflow-hidden">
+        <div class="pointer-events-none absolute -top-16 -right-16 w-44 h-44 rounded-full bg-brand-soft opacity-70 blur-2xl"></div>
+        <div class="relative">
+          <span class="inline-flex items-center rounded-full bg-accent-100 text-accent-600 text-[11px] font-bold uppercase tracking-wider px-3 py-1 mb-3">Masuk</span>
+          <h1 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 mb-1.5">Selamat Datang</h1>
+          <p class="text-slate-500 text-sm mb-6">Masuk ke akun Victoria Sekuritas Anda.</p>
 
-        <!-- Logo/Title -->
-        <div class="relative mb-8">
-          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-soft bg-brand-gradient">
-            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-            </svg>
-          </div>
-          <h1 class="font-display text-3xl font-extrabold tracking-tight text-primary-900">Masuk ke Akun</h1>
-          <p class="text-slate-500 text-sm mt-2">Selamat datang kembali di Victoria Sekuritas</p>
-        </div>
-
-        <!-- Step 1: Phone input -->
-        <div v-if="step === 1" class="relative">
-          <div class="mb-6">
-            <label class="block text-sm font-medium text-slate-700 mb-2">Nomor Handphone</label>
-            <div class="flex">
-              <div class="flex items-center px-3 bg-primary-50 border border-r-0 border-primary-100 rounded-l-xl text-sm text-primary-700 font-semibold">
-                +62
-              </div>
-              <input
-                v-model="phone"
-                type="tel"
-                placeholder="8xxxxxxxxxx"
-                class="flex-1 border border-slate-200 rounded-r-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                @keyup.enter="sendOtp"
-                inputmode="numeric"
-              />
-            </div>
-            <p v-if="phoneError" class="text-red-500 text-xs mt-1">{{ phoneError }}</p>
-          </div>
-
-          <button
-            @click="sendOtp"
-            :disabled="loading || !phone"
-            class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-card-hover hover:-translate-y-0.5 active:translate-y-0"
-            :class="phone && !loading ? 'text-white bg-brand-gradient' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
-          >
-            <span v-if="loading" class="flex items-center justify-center gap-2">
-              <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
-              Mengirim OTP...
-            </span>
-            <span v-else>Kirim Kode OTP</span>
-          </button>
-
-          <p class="text-center text-sm text-slate-500 mt-5">
-            Belum punya akun?
-            <NuxtLink to="/register" class="text-primary-600 font-semibold hover:underline">Daftar Sekarang</NuxtLink>
+          <p v-if="error" class="mb-4 p-3 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl">
+            {{ error }}
+            <NuxtLink v-if="needActivation" to="/register" class="font-semibold underline ml-1">Daftar ulang</NuxtLink>
           </p>
-        </div>
 
-        <!-- Step 2: OTP Verification -->
-        <div v-else-if="step === 2" class="relative">
-          <div class="text-center mb-6">
-            <div class="w-12 h-12 bg-primary-50 ring-1 ring-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
+          <form @submit.prevent="submit" class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+              <input v-model="form.email" type="email" required placeholder="nama@email.com"
+                class="w-full border border-slate-200 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400" />
             </div>
-            <p class="text-sm text-slate-600">Kode OTP dikirim ke</p>
-            <p class="font-semibold text-primary-900">+62{{ phone }}</p>
-          </div>
-
-          <!-- Demo hint -->
-          <div class="mb-4 flex items-center gap-2 bg-brand-soft border border-accent-200 rounded-xl px-4 py-2.5">
-            <span class="text-accent-500 text-sm">🔑</span>
-            <p class="text-sm text-accent-700">
-              <span class="font-semibold">Demo:</span> gunakan kode <span class="font-mono font-bold tracking-widest">123456</span>
-            </p>
-          </div>
-
-          <div class="mb-6">
-            <label class="block text-sm font-medium text-slate-700 mb-2 text-center">Masukkan Kode OTP</label>
-            <div class="flex gap-3 justify-center">
-              <input
-                v-for="(digit, idx) in otpDigits"
-                :key="idx"
-                :ref="(el) => { if (el) otpRefs[idx] = el as HTMLInputElement }"
-                v-model="otpDigits[idx]"
-                type="text"
-                maxlength="1"
-                inputmode="numeric"
-                class="w-12 h-12 text-center text-xl font-bold border-2 rounded-xl focus:outline-none focus:border-primary-500 transition-colors"
-                :class="otpDigits[idx] ? 'border-primary-500 bg-primary-50' : 'border-slate-300'"
-                @input="onOtpInput(idx)"
-                @keydown.backspace="onOtpBackspace(idx)"
-              />
-            </div>
-            <p v-if="otpError" class="text-red-500 text-xs mt-2 text-center">{{ otpError }}</p>
-          </div>
-
-          <button
-            @click="verifyOtp"
-            :disabled="loading || otpFilled.length < 6"
-            class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-card-hover hover:-translate-y-0.5 active:translate-y-0"
-            :class="otpFilled.length === 6 && !loading ? 'text-white bg-brand-gradient' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
-          >
-            <span v-if="loading">Memverifikasi...</span>
-            <span v-else>Verifikasi OTP</span>
-          </button>
-
-          <div class="text-center mt-4">
-            <button
-              @click="resendOtp"
-              :disabled="resendCooldown > 0"
-              class="text-sm text-accent-600 font-medium hover:underline disabled:text-slate-400"
-            >
-              {{ resendCooldown > 0 ? `Kirim ulang dalam ${resendCooldown}s` : 'Kirim ulang OTP' }}
-            </button>
-          </div>
-
-          <button @click="step = 1" class="w-full text-center text-sm text-slate-500 mt-3 hover:text-primary-700">
-            &larr; Ubah nomor HP
-          </button>
-        </div>
-
-        <!-- Step 3: Enter PIN -->
-        <div v-else-if="step === 3" class="relative">
-          <div class="text-center mb-6">
-            <div class="w-12 h-12 bg-primary-50 ring-1 ring-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h2 class="font-display text-xl font-extrabold tracking-tight text-primary-900">Masukkan PIN</h2>
-            <p class="text-sm text-slate-500 mt-1">Masukkan 6 digit PIN Anda</p>
-          </div>
-
-          <div class="mb-6">
-            <div class="flex gap-3 justify-center">
-              <div
-                v-for="i in 6"
-                :key="i"
-                class="w-12 h-12 rounded-xl border-2 flex items-center justify-center transition-colors"
-                :class="pinValue.length >= i ? 'border-primary-500 bg-primary-50' : 'border-slate-300'"
-              >
-                <div v-if="pinValue.length >= i" class="w-3 h-3 bg-primary-600 rounded-full"></div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+              <div class="relative">
+                <input v-model="form.password" :type="show ? 'text' : 'password'" required placeholder="Password"
+                  class="w-full border border-slate-200 rounded-xl px-3.5 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400" />
+                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
               </div>
             </div>
-            <p v-if="pinError" class="text-red-500 text-xs mt-2 text-center">{{ pinError }}</p>
-          </div>
 
-          <!-- PIN Keypad -->
-          <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
-            <button
-              v-for="key in pinKeypad"
-              :key="key"
-              @click="onPinKey(key)"
-              class="h-14 rounded-xl font-semibold text-primary-700 transition-colors"
-              :class="key === '' ? 'invisible' : 'bg-primary-50 hover:bg-primary-100 active:bg-primary-200'"
-            >
-              <span v-if="key === 'del'">
-                <svg class="w-5 h-5 mx-auto text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z" />
-                </svg>
-              </span>
-              <span v-else>{{ key }}</span>
+            <button type="submit" :disabled="authStore.loading || !form.email || !form.password"
+              class="w-full py-3.5 rounded-xl font-semibold text-sm transition-all"
+              :class="(form.email && form.password && !authStore.loading) ? 'bg-brand-gradient text-white shadow-card hover:-translate-y-0.5' : 'bg-slate-100 text-slate-400 cursor-not-allowed'">
+              {{ authStore.loading ? 'Memproses…' : 'Masuk' }}
             </button>
-          </div>
+          </form>
 
-          <p v-if="loading" class="text-center text-sm text-primary-600 mt-4">Memverifikasi PIN...</p>
+          <p class="text-center text-sm text-slate-500 mt-6">
+            Belum punya akun?
+            <NuxtLink to="/register" class="text-primary-600 font-semibold hover:underline">Daftar</NuxtLink>
+          </p>
         </div>
       </div>
     </NuxtLayout>
@@ -181,102 +53,32 @@ definePageMeta({ middleware: 'guest', layout: false })
 const authStore = useAuthStore()
 const router = useRouter()
 
-const step = ref(1)
-const phone = ref('')
-const phoneError = ref('')
-const otpDigits = ref(['', '', '', '', '', ''])
-const otpRefs = ref<HTMLInputElement[]>([])
-const otpError = ref('')
-const pinValue = ref('')
-const pinError = ref('')
-const loading = ref(false)
-const resendCooldown = ref(0)
+const form = ref({ email: '', password: '' })
+const show = ref(false)
+const error = ref('')
+const needActivation = ref(false)
 
-const otpFilled = computed(() => otpDigits.value.filter(d => d !== '').join(''))
-
-const pinKeypad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del']
-
-const onOtpInput = (idx: number) => {
-  const val = otpDigits.value[idx]
-  if (val && idx < 5) {
-    otpRefs.value[idx + 1]?.focus()
-  }
-  otpDigits.value[idx] = val.replace(/\D/g, '').slice(0, 1)
-}
-
-const onOtpBackspace = (idx: number) => {
-  if (!otpDigits.value[idx] && idx > 0) {
-    otpDigits.value[idx - 1] = ''
-    otpRefs.value[idx - 1]?.focus()
-  }
-}
-
-const onPinKey = (key: string) => {
-  if (key === 'del') {
-    pinValue.value = pinValue.value.slice(0, -1)
-  } else if (pinValue.value.length < 6) {
-    pinValue.value += key
-    if (pinValue.value.length === 6) {
-      doLogin()
+const submit = async () => {
+  error.value = ''
+  needActivation.value = false
+  try {
+    await authStore.loginEmail(form.value.email, form.value.password)
+    // Datang dari link promo → catat pendaftaran event
+    if (process.client) {
+      const promoRef = localStorage.getItem('promo_ref')
+      if (promoRef) {
+        try { await useApi().post('/events/register', { code: promoRef }) } catch {}
+        localStorage.removeItem('promo_ref')
+      }
     }
-  }
-}
-
-const sendOtp = async () => {
-  phoneError.value = ''
-  if (!phone.value || phone.value.length < 9) {
-    phoneError.value = 'Nomor HP tidak valid'
-    return
-  }
-  loading.value = true
-  try {
-    await authStore.sendOtp(phone.value)
-    step.value = 2
-    startResendCooldown()
+    // KYC belum approved → lanjut pembukaan rekening; sudah → dashboard
+    const approved = authStore.user?.kyc_status === 'approved'
+    router.push(approved ? '/dashboard' : '/pembukaan-rekening/ekyc')
   } catch (e: any) {
-    phoneError.value = e?.data?.message || 'Gagal mengirim OTP. Coba lagi.'
-  } finally {
-    loading.value = false
+    error.value = e?.data?.message || 'Email atau password salah.'
+    needActivation.value = !!e?.data?.need_activation
   }
 }
 
-const verifyOtp = async () => {
-  otpError.value = ''
-  const otp = otpDigits.value.join('')
-  loading.value = true
-  try {
-    await authStore.verifyOtp(phone.value, otp)
-    step.value = 3
-  } catch (e: any) {
-    otpError.value = e?.data?.message || 'Kode OTP salah. Coba lagi.'
-  } finally {
-    loading.value = false
-  }
-}
-
-const doLogin = async () => {
-  pinError.value = ''
-  loading.value = true
-  try {
-    await authStore.login(phone.value, pinValue.value)
-    router.push('/dashboard')
-  } catch (e: any) {
-    pinError.value = e?.data?.message || 'PIN salah. Coba lagi.'
-    pinValue.value = ''
-    loading.value = false
-  }
-}
-
-const resendOtp = async () => {
-  if (resendCooldown.value > 0) return
-  await sendOtp()
-}
-
-const startResendCooldown = () => {
-  resendCooldown.value = 60
-  const interval = setInterval(() => {
-    resendCooldown.value--
-    if (resendCooldown.value <= 0) clearInterval(interval)
-  }, 1000)
-}
+useHead({ title: 'Masuk — Victoria Sekuritas' })
 </script>

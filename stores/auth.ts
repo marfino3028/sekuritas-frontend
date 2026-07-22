@@ -49,6 +49,48 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // --- Flow WEB (email + password) ---
+    async registerEmail(email: string, password: string, name?: string) {
+      const config = useRuntimeConfig()
+      this.loading = true
+      try {
+        return await $fetch('/auth/register-email', {
+          baseURL: config.public.apiBase,
+          method: 'POST',
+          body: { email, password, name },
+        })
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async activate(token: string) {
+      const config = useRuntimeConfig()
+      return $fetch('/auth/activate', {
+        baseURL: config.public.apiBase,
+        method: 'POST',
+        body: { token },
+      })
+    },
+
+    async loginEmail(email: string, password: string) {
+      const config = useRuntimeConfig()
+      this.loading = true
+      try {
+        const data = await $fetch<{ data: { token: string; user: User } }>('/auth/login-email', {
+          baseURL: config.public.apiBase,
+          method: 'POST',
+          body: { email, password },
+        })
+        this.token = data.data.token
+        this.user = data.data.user
+        if (process.client) localStorage.setItem('auth_token', this.token)
+        return data
+      } finally {
+        this.loading = false
+      }
+    },
+
     async sendOtp(phone: string) {
       const config = useRuntimeConfig()
       return $fetch('/auth/send-otp', {
