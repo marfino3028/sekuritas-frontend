@@ -3,10 +3,17 @@
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-slate-100 z-50">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
+        <NuxtLink to="/" class="flex items-center gap-2.5">
           <img src="/logo.png" alt="Victoria Sekuritas" class="w-9 h-9 object-contain" />
           <span class="text-xl font-display font-extrabold tracking-tight text-slate-900">Victoria Sekuritas</span>
-        </div>
+        </NuxtLink>
+        <!-- Menu tengah -->
+        <nav class="hidden md:flex items-center gap-1">
+          <NuxtLink v-for="item in navItems" :key="item.to" :to="item.to"
+            class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-primary-700 hover:bg-primary-50/60 transition-colors">
+            {{ item.label }}
+          </NuxtLink>
+        </nav>
         <div class="flex items-center gap-3">
           <NuxtLink to="/login" class="text-sm font-semibold text-primary-700 hover:text-primary-800 transition-colors">
             Masuk
@@ -309,6 +316,14 @@
 
 <script setup lang="ts">
 definePageMeta({ layout: false })
+
+const navItems = [
+  { to: '/produk', label: 'Reksa Dana' },
+  { to: '/manajer-investasi', label: 'Manajer Investasi' },
+  { to: '/bandingkan', label: 'Bandingkan' },
+  { to: '/promo', label: 'Promo' },
+  { to: '/artikel', label: 'Artikel' },
+]
 
 interface Article {
   id: number | string
