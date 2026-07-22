@@ -9,10 +9,8 @@
       <!-- Logo -->
       <div class="relative flex items-center px-6 py-6 border-b border-white/10">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-soft bg-white/15 ring-1 ring-white/20 backdrop-blur">
-            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-            </svg>
+          <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-soft bg-white shadow-soft">
+            <img src="/logo.png" alt="Victoria Sekuritas" class="w-7 h-7 object-contain" />
           </div>
           <div>
             <p class="text-white font-display font-extrabold text-[17px] tracking-tight leading-none">Victoria Sekuritas</p>
@@ -107,10 +105,8 @@
         <div class="pointer-events-none absolute -top-16 -right-16 w-48 h-48 rounded-full bg-accent-400/30 blur-3xl"></div>
         <div class="relative flex items-center justify-between px-5 py-5 border-b border-white/10">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-white/15 ring-1 ring-white/20 backdrop-blur">
-              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-              </svg>
+            <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-white shadow-soft">
+              <img src="/logo.png" alt="Victoria Sekuritas" class="w-7 h-7 object-contain" />
             </div>
             <div>
               <p class="text-white font-display font-extrabold text-base tracking-tight leading-none">Victoria Sekuritas</p>
