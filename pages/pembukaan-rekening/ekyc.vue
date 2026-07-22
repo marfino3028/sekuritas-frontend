@@ -78,8 +78,7 @@
       <div v-else-if="step === 4">
         <h2 class="text-xl font-display font-extrabold text-slate-800 mb-1">Tanda Tangan Digital</h2>
         <p class="text-sm text-slate-500 mb-5">Bubuhkan tanda tangan sesuai identitas Anda.</p>
-        <canvas ref="canvasEl" class="w-full h-48 border border-slate-300 rounded-xl touch-none bg-white"
-                @pointerdown="startDraw" @pointermove="draw" @pointerup="endDraw" @pointerleave="endDraw"></canvas>
+        <canvas ref="canvasEl" class="w-full h-48 border border-slate-300 rounded-xl touch-none bg-white"></canvas>
         <button class="mt-2 text-xs text-slate-500 hover:text-slate-700" @click="clearCanvas">Hapus & ulangi</button>
       </div>
 
@@ -149,8 +148,8 @@ const faceResult = ref<any>(null)
 const verifyResult = ref<any>(null)
 
 const canvasEl = ref<HTMLCanvasElement | null>(null)
-let drawing = false
-let hasSignature = false
+let signaturePad: any = null   // instance signature_pad (szimek)
+const hasSignature = ref(false)
 
 onMounted(async () => {
   if (!authStore.token) { router.push('/login'); return }
@@ -166,7 +165,7 @@ const canNext = computed(() => {
   if (step.value === 1) return !!ktpFile.value
   if (step.value === 2) return !!selfieFile.value
   if (step.value === 3) return true
-  if (step.value === 4) return hasSignature
+  if (step.value === 4) return hasSignature.value
   return true
 })
 
@@ -221,7 +220,11 @@ async function next() {
       // siapkan canvas pada frame berikutnya
       requestAnimationFrame(setupCanvas)
     } else if (step.value === 4) {
-      const dataUrl = canvasEl.value!.toDataURL('image/png')
+      if (!signaturePad || signaturePad.isEmpty()) {
+        error.value = 'Tanda tangan belum dibuat.'
+        return
+      }
+      const dataUrl = signaturePad.toDataURL('image/png')
       await ekyc.sign(sessionId.value, dataUrl)
       const v = await ekyc.verify(sessionId.value)
       verifyResult.value = v.result
@@ -234,38 +237,23 @@ async function next() {
   }
 }
 
-// ---- Signature canvas ----
-function setupCanvas() {
+// ---- Tanda tangan digital: signature_pad (github.com/szimek/signature_pad) ----
+async function setupCanvas() {
   const c = canvasEl.value
   if (!c) return
-  c.width = c.offsetWidth
-  c.height = c.offsetHeight
-  const ctx = c.getContext('2d')!
-  ctx.strokeStyle = '#0A1F44'
-  ctx.lineWidth = 2
-  ctx.lineCap = 'round'
+  // Skala canvas mengikuti devicePixelRatio agar goresan tajam
+  const ratio = Math.max(window.devicePixelRatio || 1, 1)
+  c.width = c.offsetWidth * ratio
+  c.height = c.offsetHeight * ratio
+  c.getContext('2d')!.scale(ratio, ratio)
+
+  const { default: SignaturePad } = await import('signature_pad')
+  signaturePad = new SignaturePad(c, { penColor: '#312E81', minWidth: 1, maxWidth: 2.5 })
+  hasSignature.value = false
+  signaturePad.addEventListener('endStroke', () => { hasSignature.value = !signaturePad.isEmpty() })
 }
-function pos(e: PointerEvent) {
-  const r = canvasEl.value!.getBoundingClientRect()
-  return { x: e.clientX - r.left, y: e.clientY - r.top }
-}
-function startDraw(e: PointerEvent) {
-  drawing = true
-  const ctx = canvasEl.value!.getContext('2d')!
-  const p = pos(e)
-  ctx.beginPath(); ctx.moveTo(p.x, p.y)
-}
-function draw(e: PointerEvent) {
-  if (!drawing) return
-  const ctx = canvasEl.value!.getContext('2d')!
-  const p = pos(e)
-  ctx.lineTo(p.x, p.y); ctx.stroke()
-  hasSignature = true
-}
-function endDraw() { drawing = false }
 function clearCanvas() {
-  const c = canvasEl.value!
-  c.getContext('2d')!.clearRect(0, 0, c.width, c.height)
-  hasSignature = false
+  signaturePad?.clear()
+  hasSignature.value = false
 }
 </script>
