@@ -151,15 +151,23 @@ const canvasEl = ref<HTMLCanvasElement | null>(null)
 let signaturePad: any = null   // instance signature_pad (szimek)
 const hasSignature = ref(false)
 
-onMounted(async () => {
+const startSession = async () => {
+  error.value = ''
   if (!authStore.token) { router.push('/login'); return }
   try {
     const s = await ekyc.createSession()
     sessionId.value = s.id
   } catch (e: any) {
-    error.value = 'Gagal memulai sesi eKYC. Pastikan sudah login.'
+    const status = e?.response?.status || e?.statusCode
+    if (status === 401) {
+      error.value = 'Sesi login berakhir. Silakan login ulang.'
+      router.push('/login')
+    } else {
+      error.value = `Gagal memulai sesi eKYC${status ? ' (' + status + ')' : ''}: ${e?.data?.message || e?.message || 'error tidak diketahui'}`
+    }
   }
-})
+}
+onMounted(startSession)
 
 const canNext = computed(() => {
   if (step.value === 1) return !!ktpFile.value
