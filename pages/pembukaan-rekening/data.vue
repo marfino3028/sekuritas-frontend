@@ -155,7 +155,24 @@
             <Upload label="Foto NPWP" type="npwp" :done="uploads.npwp" @uploaded="uploads.npwp = true" @err="onUploadErr" />
             <Upload label="Buku Tabungan / Rekening" type="bank_book" :done="uploads.bank_book" @uploaded="uploads.bank_book = true" @err="onUploadErr" />
           </div>
-          <p class="text-xs text-slate-400 mt-2">Tanda tangan sudah diambil pada langkah eKYC sebelumnya.</p>
+        </div>
+
+        <!-- Tanda Tangan & Paraf -->
+        <div class="pt-2 border-t border-slate-100">
+          <p class="text-sm font-semibold text-primary-700 mb-3">Tanda Tangan &amp; Paraf</p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs text-slate-500 mb-1.5">Tanda Tangan</p>
+              <canvas ref="sigCanvas" class="w-full h-32 border border-slate-300 rounded-xl bg-white touch-none"></canvas>
+              <button type="button" class="text-xs text-slate-500 mt-1" @click="clearPad('sig')">Hapus</button>
+            </div>
+            <div>
+              <p class="text-xs text-slate-500 mb-1.5">Paraf</p>
+              <canvas ref="parafCanvas" class="w-full h-32 border border-slate-300 rounded-xl bg-white touch-none"></canvas>
+              <button type="button" class="text-xs text-slate-500 mt-1" @click="clearPad('paraf')">Hapus</button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">*Bubuhkan di tengah kotak. Wajib diisi sebelum submit.</p>
         </div>
       </div>
 
@@ -164,18 +181,64 @@
         <button v-if="step > 1" class="px-4 py-2.5 text-sm text-slate-500" :disabled="loading" @click="step--">Kembali</button>
         <span v-else></span>
         <button v-if="step < 4" class="px-6 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card disabled:opacity-50" :disabled="!stepValid" @click="step++">Berikutnya</button>
-        <button v-else class="px-6 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card disabled:opacity-50" :disabled="loading || !agreeTnc" @click="submit">{{ loading ? 'Mengirim…' : 'Submit' }}</button>
+        <button v-else class="px-6 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card disabled:opacity-50" :disabled="loading || !agreeTnc || !hasSig || !hasParaf" @click="submit">{{ loading ? 'Mengirim…' : 'Submit' }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, h } from 'vue'
+import { ref, computed, h, watch } from 'vue'
 
 const { post, postFormData } = useApi()
 const authStore = useAuthStore()
 const router = useRouter()
+
+// --- Tanda tangan & paraf (signature_pad) ---
+const sigCanvas = ref<HTMLCanvasElement | null>(null)
+const parafCanvas = ref<HTMLCanvasElement | null>(null)
+let sigPad: any = null
+let parafPad: any = null
+const hasSig = ref(false)
+const hasParaf = ref(false)
+
+async function setupPads() {
+  const { default: SignaturePad } = await import('signature_pad')
+  const init = (canvas: HTMLCanvasElement | null, onEnd: () => void) => {
+    if (!canvas) return null
+    const ratio = Math.max(window.devicePixelRatio || 1, 1)
+    canvas.width = canvas.offsetWidth * ratio
+    canvas.height = canvas.offsetHeight * ratio
+    canvas.getContext('2d')!.scale(ratio, ratio)
+    const pad = new SignaturePad(canvas, { penColor: '#A40001', minWidth: 1, maxWidth: 2.5 })
+    pad.addEventListener('endStroke', onEnd)
+    return pad
+  }
+  sigPad = init(sigCanvas.value, () => (hasSig.value = !sigPad.isEmpty()))
+  parafPad = init(parafCanvas.value, () => (hasParaf.value = !parafPad.isEmpty()))
+}
+function clearPad(which: 'sig' | 'paraf') {
+  if (which === 'sig') { sigPad?.clear(); hasSig.value = false }
+  else { parafPad?.clear(); hasParaf.value = false }
+}
+watch(step, (s) => { if (s === 4) requestAnimationFrame(setupPads) })
+
+// data URL → File PNG untuk upload
+function dataUrlToFile(dataUrl: string, name: string): File {
+  const [head, b64] = dataUrl.split(',')
+  const mime = head.match(/:(.*?);/)?.[1] || 'image/png'
+  const bin = atob(b64)
+  const arr = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i)
+  return new File([arr], name, { type: mime })
+}
+async function uploadPad(type: string, pad: any, name: string) {
+  if (!pad || pad.isEmpty()) return
+  const fd = new FormData()
+  fd.append('type', type)
+  fd.append('file', dataUrlToFile(pad.toDataURL('image/png'), name))
+  await postFormData('/kyc/upload', fd)
+}
 
 const steps = ['Data Pribadi', 'Data Pekerjaan', 'Informasi Tambahan', 'Persyaratan']
 const step = ref(1)
@@ -235,6 +298,9 @@ const submit = async () => {
   error.value = ''
   loading.value = true
   try {
+    // Unggah tanda tangan & paraf dulu
+    await uploadPad('signature', sigPad, 'signature.png')
+    await uploadPad('paraf', parafPad, 'paraf.png')
     await post('/kyc/submit', {
       ...f.value,
       investment_objective: objectiveMap[add.value.investment_objective] || 'other',
