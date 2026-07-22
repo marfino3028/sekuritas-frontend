@@ -74,7 +74,12 @@
           <p class="text-xs text-primary-400 mt-2">Diproses gratis di perangkat Anda (Tesseract). Data otomatis mengisi form berikutnya — bisa dikoreksi.</p>
         </div>
         <div v-if="ocrResult" class="mt-3 text-sm bg-slate-50 rounded-xl p-4">
-          <p class="text-slate-500">Verifikasi server — Confidence: <b>{{ ocrResult.ocr_confidence }}%</b></p>
+          <p class="text-slate-500">OCR server ({{ ocrResult.engine || ocrResult.raw_ocr?.engine || 'stub' }}) — Confidence: <b>{{ ocrResult.ocr_confidence }}%</b></p>
+        </div>
+        <div v-if="dukcapil" class="mt-3 text-sm rounded-xl p-4 flex items-center gap-2"
+             :class="dukcapil.verified ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'">
+          <svg v-if="dukcapil.verified" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Dukcapil: <b>{{ dukcapil.verified ? 'NIK terverifikasi' : 'Belum terverifikasi' }}</b> <span class="text-xs opacity-70">({{ dukcapil.source }})</span> — {{ dukcapil.message }}</span>
         </div>
       </div>
 
@@ -193,6 +198,29 @@ const ocrScanning = ref(false)
 const livenessResult = ref<any>(null)
 const faceResult = ref<any>(null)
 const verifyResult = ref<any>(null)
+const dukcapil = ref<any>(null)
+
+// Gabungkan hasil OCR server (PaddleOCR) ke penyimpanan untuk auto-isi form.
+function mergeServerOcr(doc: any) {
+  if (!doc) return
+  const norm = (g: any) => {
+    const u = String(g || '').toUpperCase()
+    if (u.includes('PEREMPUAN') || u === 'F') return 'F'
+    if (u.includes('LAKI') || u === 'M') return 'M'
+    return null
+  }
+  const prev = (() => { try { return JSON.parse(localStorage.getItem('ktp_ocr') || '{}') } catch { return {} } })()
+  const server = {
+    nik: doc.nik, name: doc.name, birth_place: doc.birth_place, birth_date: doc.birth_date,
+    gender: norm(doc.gender), address: doc.address, religion: doc.religion,
+    marital_status: doc.marital_status, occupation: doc.occupation,
+  }
+  // server non-null menimpa hasil on-device
+  const merged: any = { ...prev }
+  for (const [k, v] of Object.entries(server)) if (v) merged[k] = v
+  if (process.client) localStorage.setItem('ktp_ocr', JSON.stringify(merged))
+  localOcr.value = merged
+}
 
 const canvasEl = ref<HTMLCanvasElement | null>(null)
 let signaturePad: any = null   // instance signature_pad (szimek)
@@ -306,7 +334,14 @@ async function next() {
       const override: Record<string, string> = {}
       if (localOcr.value?.nik) override.nik = localOcr.value.nik
       if (localOcr.value?.name) override.name = localOcr.value.name
-      ocrResult.value = (await ekyc.ocr(sessionId.value, ktpFile.value!, override)).ocr
+      const res = await ekyc.ocr(sessionId.value, ktpFile.value!, override)
+      ocrResult.value = res.ocr
+      // Gabungkan hasil OCR SERVER (PaddleOCR bila aktif) — server prioritas untuk auto-isi form
+      mergeServerOcr(res.ocr)
+      // Verifikasi NIK ke Dukcapil (mock/asli)
+      if (ocrResult.value?.nik) {
+        try { dukcapil.value = (await ekyc.verifyNik(sessionId.value)).dukcapil } catch { /* opsional */ }
+      }
       step.value = 2
     } else if (step.value === 2) {
       const lv = await ekyc.liveness(sessionId.value, selfieFile.value!)

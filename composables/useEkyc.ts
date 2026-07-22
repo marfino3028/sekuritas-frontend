@@ -50,6 +50,10 @@ export const useEkyc = () => {
   const sign = (sessionId: string, signature: string) =>
     post<{ data: any }>('/ekyc/signature', { session_id: sessionId, signature }).then((r) => r.data)
 
+  /** Verifikasi NIK hasil OCR ke Dukcapil (mock/asli). */
+  const verifyNik = (sessionId: string) =>
+    post<{ data: { dukcapil: any } }>('/ekyc/verify-nik', { session_id: sessionId }).then((r) => r.data)
+
   const verify = (sessionId: string) =>
     post<{ data: { session: EkycSession; result: EkycVerifyResult } }>('/ekyc/verify', {
       session_id: sessionId,
@@ -58,5 +62,5 @@ export const useEkyc = () => {
   const status = (sessionId: string) =>
     get<{ data: any }>(`/ekyc/status/${sessionId}`).then((r) => r.data)
 
-  return { createSession, ocr, liveness, faceMatch, sign, verify, status }
+  return { createSession, ocr, liveness, faceMatch, sign, verify, verifyNik, status }
 }
