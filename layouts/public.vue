@@ -95,6 +95,7 @@ const route = useRoute()
 const navItems = [
   { to: '/produk', label: 'Reksa Dana' },
   { to: '/manajer-investasi', label: 'Manajer Investasi' },
+  { to: '/bandingkan', label: 'Bandingkan' },
   { to: '/promo', label: 'Promo' },
   { to: '/artikel', label: 'Artikel' },
 ]
