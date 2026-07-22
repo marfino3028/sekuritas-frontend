@@ -189,8 +189,9 @@ const pageTitle = computed(() => {
     '/transaksi': 'Transaksi',
     '/profil': 'Profil',
     '/kyc': 'Verifikasi KYC',
+    '/pembukaan-rekening/ekyc': 'Verifikasi eKYC',
   }
-  return titles[route.path] || 'Sekuritas'
+  return titles[route.path] || 'Victoria Sekuritas'
 })
 
 const isActive = (path: string) => {

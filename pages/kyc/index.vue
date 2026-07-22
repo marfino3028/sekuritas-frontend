@@ -11,6 +11,21 @@
       </div>
     </div>
 
+    <!-- CTA verifikasi otomatis (eKYC) -->
+    <NuxtLink to="/pembukaan-rekening/ekyc"
+      class="flex items-center justify-between gap-3 mb-8 p-4 rounded-card border border-primary-100 bg-primary-50 hover:bg-primary-100 transition group">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-gradient flex items-center justify-center text-white flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+          <p class="text-sm font-bold text-primary-800">Coba Verifikasi Otomatis (eKYC)</p>
+          <p class="text-xs text-primary-600">Scan KTP + selfie + tanda tangan, hasil instan.</p>
+        </div>
+      </div>
+      <svg class="w-5 h-5 text-primary-500 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </NuxtLink>
+
     <!-- Progress -->
     <div class="mb-8">
       <div class="flex items-center justify-between mb-2">
