@@ -80,6 +80,7 @@
         <div class="flex items-center gap-4 text-xs text-slate-500">
           <NuxtLink to="/produk" class="hover:text-primary-700">Reksa Dana</NuxtLink>
           <NuxtLink to="/manajer-investasi" class="hover:text-primary-700">Manajer Investasi</NuxtLink>
+          <NuxtLink to="/promo" class="hover:text-primary-700">Promo</NuxtLink>
           <NuxtLink to="/login" class="hover:text-primary-700">Masuk</NuxtLink>
         </div>
       </div>
@@ -94,6 +95,7 @@ const route = useRoute()
 const navItems = [
   { to: '/produk', label: 'Reksa Dana' },
   { to: '/manajer-investasi', label: 'Manajer Investasi' },
+  { to: '/promo', label: 'Promo' },
   { to: '/artikel', label: 'Artikel' },
 ]
 
