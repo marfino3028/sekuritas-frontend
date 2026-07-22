@@ -251,7 +251,7 @@ const sortOptions = [
 ]
 
 // --- helpers ---
-const avatarColors = ['#4F46E5', '#6366F1', '#4338CA', '#7C3AED', '#8B5CF6', '#5B21B6']
+const avatarColors = ['#A40001', '#C67177', '#7D0001', '#A0474E', '#D59997', '#7D0001']
 const avatarColor = (id: number) => avatarColors[id % avatarColors.length]
 
 const formatAUM = (aum: number) => {

@@ -139,12 +139,12 @@
             <svg class="w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.18" />
-                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+                  <stop offset="0%" stop-color="#C67177" stop-opacity="0.18" />
+                  <stop offset="100%" stop-color="#C67177" stop-opacity="0" />
                 </linearGradient>
                 <linearGradient id="chartLine" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#4f46e5" />
-                  <stop offset="100%" stop-color="#8b5cf6" />
+                  <stop offset="0%" stop-color="#A40001" />
+                  <stop offset="100%" stop-color="#D59997" />
                 </linearGradient>
               </defs>
               <path :d="chartAreaPath" fill="url(#chartGrad)" />

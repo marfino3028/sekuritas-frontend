@@ -205,7 +205,7 @@ const formatDate = (date: string): string => {
 // Category -> branded gradient cover
 const catCover = (category: string): string => {
   const c = (category || '').toLowerCase()
-  if (c.includes('edukasi')) return 'bg-gradient-to-br from-violet-600 to-accent-500'
+  if (c.includes('edukasi')) return 'bg-gradient-to-br from-primary-600 to-accent-500'
   if (c.includes('tips')) return 'bg-gradient-to-br from-emerald-600 to-teal-500'
   if (c.includes('analisis')) return 'bg-gradient-to-br from-amber-500 to-orange-500'
   // Berita Pasar & default

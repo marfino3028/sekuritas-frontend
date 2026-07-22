@@ -164,7 +164,7 @@
           <div class="flex items-center justify-center mb-6">
             <div class="relative w-40 h-40">
               <svg viewBox="0 0 40 40" class="w-full h-full transform -rotate-90">
-                <circle cx="20" cy="20" r="15.9155" fill="none" stroke="#EEF2FF" stroke-width="5" />
+                <circle cx="20" cy="20" r="15.9155" fill="none" stroke="#FBEAEA" stroke-width="5" />
                 <circle
                   v-for="(segment, i) in pieSegments"
                   :key="i"
@@ -254,7 +254,7 @@ const summary = computed(() => {
 })
 
 // Indigo Premium palette: indigo -> violet
-const pieColors = ['#4F46E5', '#6366F1', '#7C3AED', '#8B5CF6', '#A78BFA', '#818CF8']
+const pieColors = ['#A40001', '#C67177', '#A0474E', '#D59997', '#D59997', '#C85155']
 
 const composition = (h: any) => {
   if (!summary.value.totalValue) return 0

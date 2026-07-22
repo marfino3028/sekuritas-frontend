@@ -248,7 +248,7 @@ async function setupCanvas() {
   c.getContext('2d')!.scale(ratio, ratio)
 
   const { default: SignaturePad } = await import('signature_pad')
-  signaturePad = new SignaturePad(c, { penColor: '#312E81', minWidth: 1, maxWidth: 2.5 })
+  signaturePad = new SignaturePad(c, { penColor: '#7D0001', minWidth: 1, maxWidth: 2.5 })
   hasSignature.value = false
   signaturePad.addEventListener('endStroke', () => { hasSignature.value = !signaturePad.isEmpty() })
 }

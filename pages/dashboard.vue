@@ -59,7 +59,7 @@
     <div class="relative overflow-hidden rounded-card mb-6 text-white bg-brand-gradient shadow-soft">
       <!-- Decorative orbs -->
       <div class="absolute -top-20 -right-16 w-64 h-64 rounded-full opacity-25 blur-2xl"
-           style="background: radial-gradient(circle, #A78BFA, transparent 70%)"></div>
+           style="background: radial-gradient(circle, #D59997, transparent 70%)"></div>
       <div class="absolute -bottom-16 -left-12 w-48 h-48 rounded-full opacity-20 blur-2xl"
            style="background: radial-gradient(circle, #C7D2FE, transparent 70%)"></div>
 
@@ -254,10 +254,10 @@ const checklist = computed(() => [
 ])
 
 const quickActions = [
-  { label: 'Beli', icon: '📈', to: '/produk', bg: 'linear-gradient(135deg, #E0E7FF, #C7D2FE)' },
-  { label: 'Portofolio', icon: '💼', to: '/portofolio', bg: 'linear-gradient(135deg, #EDE9FE, #DDD6FE)' },
-  { label: 'Transaksi', icon: '📋', to: '/transaksi', bg: 'linear-gradient(135deg, #EEF2FF, #E0E7FF)' },
-  { label: 'Profil', icon: '⚙️', to: '/profil', bg: 'linear-gradient(135deg, #F5F3FF, #EDE9FE)' },
+  { label: 'Beli', icon: '📈', to: '/produk', bg: 'linear-gradient(135deg, #F6D0D1, #C7D2FE)' },
+  { label: 'Portofolio', icon: '💼', to: '/portofolio', bg: 'linear-gradient(135deg, #F5DEDF, #DDD6FE)' },
+  { label: 'Transaksi', icon: '📋', to: '/transaksi', bg: 'linear-gradient(135deg, #FBEAEA, #F6D0D1)' },
+  { label: 'Profil', icon: '⚙️', to: '/profil', bg: 'linear-gradient(135deg, #FBF1F1, #F5DEDF)' },
 ]
 
 const recentTransactions: any[] = []
