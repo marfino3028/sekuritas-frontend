@@ -115,8 +115,8 @@
                 :disabled="loading || !canNext" @click="next">
           {{ loading ? 'Memproses…' : nextLabel }}
         </button>
-        <NuxtLink v-else to="/dashboard" class="px-6 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card">
-          Selesai
+        <NuxtLink v-else to="/pembukaan-rekening/data" class="px-6 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card">
+          Lanjut: Lengkapi Data
         </NuxtLink>
       </div>
     </div>
