@@ -240,7 +240,6 @@
 import { ref, computed, h, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 const ekyc = useEkyc()
-const ktpOcr = useKtpOcr()
 const { post, postFormData } = useApi()
 const authStore = useAuthStore()
 const router = useRouter()
@@ -306,7 +305,7 @@ function capture(which: 'ktp' | 'selfie') {
   const v = videoEl.value; if (!v) return
   const c = document.createElement('canvas'); c.width = v.videoWidth || 1280; c.height = v.videoHeight || 720
   c.getContext('2d')!.drawImage(v, 0, 0, c.width, c.height)
-  c.toBlob((b) => { if (b) setImage(new File([b], `${which}.jpg`, { type: 'image/jpeg' })); closeCamera() }, 'image/jpeg', 0.9)
+  c.toBlob((b) => { if (b) setImage(new File([b], `${which}.jpg`, { type: 'image/jpeg' }), which); closeCamera() }, 'image/jpeg', 0.9)
 }
 function closeCamera() { mediaStream?.getTracks().forEach((t) => t.stop()); mediaStream = null; cameraFor.value = null }
 
@@ -322,10 +321,39 @@ onBeforeUnmount(() => closeCamera())
 
 function setImage(file: File, type: 'ktp' | 'selfie') {
   const url = URL.createObjectURL(file)
-  if (type === 'ktp') {
-    ktpFile.value = file; ktpPreview.value = url; ocrScanning.value = true; localOcr.value = null
-    ktpOcr.recognize(file).then((r) => { localOcr.value = r }).catch(() => {}).finally(() => (ocrScanning.value = false))
-  } else { selfieFile.value = file; selfiePreview.value = url }
+  if (type === 'ktp') { ktpFile.value = file; ktpPreview.value = url; runKtpOcr(file) }
+  else { selfieFile.value = file; selfiePreview.value = url }
+}
+
+/** Normalisasi field OCR server (PaddleOCR) → bentuk yang dipakai UI/autofill. */
+function normalizeOcr(o: any) {
+  const g = String(o?.gender || '').toUpperCase()
+  return {
+    nik: o?.nik || null, name: o?.name || null,
+    birth_place: o?.birth_place || null, birth_date: o?.birth_date || null,
+    gender: g.includes('PEREMPUAN') ? 'F' : g.includes('LAKI') ? 'M' : (o?.gender || null),
+    address: o?.address || null, religion: o?.religion || null,
+    marital_status: o?.marital_status || null, occupation: o?.occupation || null,
+    rt_rw: o?.rt_rw || null, village: o?.village || null, district: o?.district || null,
+  }
+}
+
+/** OCR KTP via server (PaddleOCR). Jalan begitu foto dipilih/diambil kamera. */
+async function runKtpOcr(file: File) {
+  if (!sessionId.value) {
+    try { sessionId.value = (await ekyc.createSession()).id }
+    catch { error.value = 'Sesi eKYC belum siap. Muat ulang halaman.'; return }
+  }
+  error.value = ''; ocrScanning.value = true; localOcr.value = null; dukcapil.value = null
+  try {
+    const res = await ekyc.ocr(sessionId.value, file)
+    ocrResult.value = res.ocr
+    localOcr.value = normalizeOcr(res.ocr)
+    if (ocrResult.value?.nik) { try { dukcapil.value = (await ekyc.verifyNik(sessionId.value)).dukcapil } catch {} }
+    autofill()
+  } catch (e: any) {
+    error.value = e?.data?.message || 'Gagal membaca KTP. Pastikan layanan OCR (PaddleOCR) aktif.'
+  } finally { ocrScanning.value = false }
 }
 
 function autofill() {
@@ -353,25 +381,10 @@ const canSubmit = computed(() => agreeTnc.value && !!selfieFile.value && hasSig.
 
 async function nextStep() {
   error.value = ''
-  if (step.value === 1) {
-    loading.value = true
-    try {
-      const override: any = {}
-      if (localOcr.value?.nik) override.nik = localOcr.value.nik
-      if (localOcr.value?.name) override.name = localOcr.value.name
-      const res = await ekyc.ocr(sessionId.value, ktpFile.value!, override)
-      ocrResult.value = res.ocr
-      // gabungkan hasil server (PaddleOCR) → localOcr
-      if (res.ocr) {
-        const norm = (g: any) => { const u = String(g || '').toUpperCase(); return u.includes('PEREMPUAN') ? 'F' : u.includes('LAKI') ? 'M' : (g || null) }
-        for (const k of ['nik', 'name', 'birth_place', 'birth_date', 'address', 'religion', 'marital_status', 'occupation']) if (res.ocr[k]) (localOcr.value ||= {})[k] = res.ocr[k]
-        if (res.ocr.gender) localOcr.value.gender = norm(res.ocr.gender)
-      }
-      if (ocrResult.value?.nik) { try { dukcapil.value = (await ekyc.verifyNik(sessionId.value)).dukcapil } catch {} }
-      autofill()
-      step.value = 2
-    } catch (e: any) { error.value = e?.data?.message || 'Gagal memproses OCR.' } finally { loading.value = false }
-  } else { step.value++ }
+  // Jika OCR belum sempat jalan (mis. gagal), coba sekali lagi sebelum lanjut.
+  if (step.value === 1 && ktpFile.value && !localOcr.value) await runKtpOcr(ktpFile.value)
+  if (step.value === 1) autofill()
+  step.value++
 }
 
 async function submit() {
