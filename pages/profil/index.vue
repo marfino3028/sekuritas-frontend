@@ -158,7 +158,12 @@ const confirmLogout = ref(false)
 
 const userInitial = computed(() => (authStore.user?.name || 'U').charAt(0).toUpperCase())
 
-const kycStatus = computed(() => authStore.user?.kyc_status || 'pending')
+const kycStatus = computed(() => {
+  const s = authStore.user?.kyc_status
+  if (!s) return 'kyc_pending'                 // belum pernah submit KYC
+  if (s === 'pending') return 'kyc_submitted'   // sudah submit, menunggu review admin
+  return `kyc_${s}`                             // approved | rejected
+})
 
 const RISK_LABELS: Record<string, string> = {
   conservative: 'Konservatif',

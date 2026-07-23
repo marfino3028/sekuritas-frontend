@@ -5,7 +5,9 @@ export interface User {
   name: string
   phone: string
   email?: string
-  kyc_status: 'pending' | 'submitted' | 'approved' | 'rejected' | null
+  // Backend (tabel `kyc`) hanya mengenal 3 status: pending | approved | rejected.
+  // `null` berarti user belum pernah submit KYC sama sekali (belum ada row).
+  kyc_status: 'pending' | 'approved' | 'rejected' | null
   sid_number?: string
   ifua_number?: string
   risk_profile?: string
@@ -22,8 +24,11 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token && !!state.user,
     isKycApproved: (state) => state.user?.kyc_status === 'approved',
-    isKycSubmitted: (state) => state.user?.kyc_status === 'submitted',
-    isKycPending: (state) => !state.user?.kyc_status || state.user?.kyc_status === 'pending',
+    // Sudah submit KYC dan sedang menunggu review admin (row ada, status masih 'pending').
+    isKycSubmitted: (state) => state.user?.kyc_status === 'pending',
+    // Belum pernah submit KYC sama sekali (belum ada row kyc untuk user ini).
+    isKycPending: (state) => !state.user?.kyc_status,
+    isKycRejected: (state) => state.user?.kyc_status === 'rejected',
     isSidActive: (state) => !!state.user?.sid_number,
     isIfuaActive: (state) => !!state.user?.ifua_number,
   },
