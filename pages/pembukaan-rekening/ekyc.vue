@@ -28,7 +28,13 @@
         <h2 class="text-lg font-display font-extrabold text-slate-800 mb-1">Foto e-KTP</h2>
         <p class="text-sm text-slate-500 mb-5">Ambil / unggah foto KTP asli. Data akan terbaca otomatis (OCR) dan mengisi form.</p>
         <div v-if="cameraFor === 'ktp'" class="rounded-xl overflow-hidden bg-black">
-          <video ref="videoEl" autoplay playsinline class="w-full max-h-72 bg-black"></video>
+          <div class="relative">
+            <video ref="videoEl" autoplay playsinline class="w-full max-h-72 bg-black object-cover"></video>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none p-6">
+              <div class="w-full max-w-sm aspect-[1.586/1] border-2 border-dashed border-white/90 rounded-2xl shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]"></div>
+            </div>
+            <p class="absolute bottom-2 inset-x-0 text-center text-white text-xs font-medium drop-shadow pointer-events-none px-4">Posisikan seluruh KTP di dalam kotak</p>
+          </div>
           <div class="flex gap-2 p-3 bg-slate-900">
             <button class="flex-1 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-lg" @click="capture('ktp')">📸 Ambil Foto</button>
             <button class="px-4 py-2.5 bg-white/10 text-white text-sm rounded-lg" @click="closeCamera">Batal</button>
@@ -165,7 +171,14 @@
           <p class="text-sm font-semibold text-primary-700 mb-1">Selfie dengan e-KTP</p>
           <p class="text-xs text-slate-400 mb-3">Foto wajah sambil memegang KTP (dagu & KTP terlihat). Digunakan untuk verifikasi wajah.</p>
           <div v-if="cameraFor === 'selfie'" class="rounded-xl overflow-hidden bg-black">
-            <video ref="videoEl" autoplay playsinline class="w-full max-h-72 bg-black" style="transform: scaleX(-1)"></video>
+            <div class="relative">
+              <video ref="videoEl" autoplay playsinline class="w-full max-h-72 bg-black object-cover" style="transform: scaleX(-1)"></video>
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none p-4 gap-3">
+                <div class="w-40 h-52 border-2 border-dashed border-white/90 rounded-[50%] shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]"></div>
+                <div class="w-48 h-14 border-2 border-dashed border-white/70 rounded-lg"></div>
+              </div>
+              <p class="absolute bottom-2 inset-x-0 text-center text-white text-xs font-medium drop-shadow pointer-events-none px-4">Posisikan wajah di oval, KTP di kotak bawah</p>
+            </div>
             <div class="flex gap-2 p-3 bg-slate-900">
               <button class="flex-1 py-2.5 bg-brand-gradient text-white text-sm font-semibold rounded-lg" @click="capture('selfie')">📸 Ambil Foto</button>
               <button class="px-4 py-2.5 bg-white/10 text-white text-sm rounded-lg" @click="closeCamera">Batal</button>
@@ -217,7 +230,7 @@
         </div>
         <h2 class="text-xl font-display font-extrabold text-slate-800 mb-1">Pengajuan Terkirim!</h2>
         <p class="text-sm text-slate-500 mb-2">Data pembukaan rekening Anda sedang diverifikasi tim kami.</p>
-        <p v-if="verifyResult" class="text-sm text-slate-500 mb-6">Skor eKYC: <b>{{ verifyResult.final_score }}</b> ({{ verifyResult.decision }})</p>
+        <p v-if="verifyResult" class="text-sm text-slate-500 mb-6">Skor eKYC: <b>{{ verifyResult.final_score }}</b> &mdash; Status: <b class="text-amber-600">Pending (menunggu review tim kami)</b></p>
         <NuxtLink to="/dashboard" class="inline-block px-6 py-3 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card">Ke Dashboard</NuxtLink>
       </div>
 

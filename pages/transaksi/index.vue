@@ -75,7 +75,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <p class="text-sm font-semibold text-gray-800">{{ trx.fund_name }}</p>
+                <p class="text-sm font-semibold text-gray-800">{{ trx.fund?.name }}</p>
                 <span class="text-xs px-2 py-0.5 rounded-full font-medium"
                   :class="{
                     'bg-primary-100 text-primary-700': trx.type === 'subscription',
@@ -85,7 +85,7 @@
                   {{ typeLabel(trx.type) }}
                 </span>
               </div>
-              <p class="text-xs text-gray-500 mt-0.5">{{ trx.date }} • Order #{{ trx.order_code }}</p>
+              <p class="text-xs text-gray-500 mt-0.5">{{ new Date(trx.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) }} • Order #{{ trx.order_number }}</p>
             </div>
             <div class="text-right flex-shrink-0">
               <p class="text-sm font-bold text-gray-800">{{ formatIDR(trx.amount) }}</p>
@@ -94,7 +94,7 @@
           </div>
 
           <!-- Progress for pending orders -->
-          <div v-if="activeMainTab === 'orders' && trx.status !== 'completed'" class="mt-4 pt-4 border-t border-slate-100">
+          <div v-if="activeMainTab === 'orders' && trx.status !== 'settled'" class="mt-4 pt-4 border-t border-slate-100">
             <div class="flex items-center gap-2">
               <div class="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
                 <div
@@ -138,12 +138,12 @@
           </button>
         </div>
         <div class="space-y-3">
-          <div class="flex justify-between"><span class="text-sm text-gray-500">Reksa Dana</span><span class="text-sm font-medium text-gray-800 text-right">{{ selectedTrx.fund_name }}</span></div>
+          <div class="flex justify-between"><span class="text-sm text-gray-500">Reksa Dana</span><span class="text-sm font-medium text-gray-800 text-right">{{ selectedTrx.fund?.name }}</span></div>
           <div class="flex justify-between"><span class="text-sm text-gray-500">Jenis</span><span class="text-sm font-medium text-gray-800">{{ typeLabel(selectedTrx.type) }}</span></div>
           <div class="flex justify-between"><span class="text-sm text-gray-500">Nominal</span><span class="text-sm font-bold text-gray-800">{{ formatIDR(selectedTrx.amount) }}</span></div>
           <div class="flex justify-between"><span class="text-sm text-gray-500">Unit</span><span class="text-sm font-medium text-gray-800">{{ selectedTrx.units?.toFixed(4) || '-' }} unit</span></div>
-          <div class="flex justify-between"><span class="text-sm text-gray-500">Tanggal</span><span class="text-sm font-medium text-gray-800">{{ selectedTrx.date }}</span></div>
-          <div class="flex justify-between"><span class="text-sm text-gray-500">Nomor Order</span><span class="text-sm font-medium text-gray-800">{{ selectedTrx.order_code }}</span></div>
+          <div class="flex justify-between"><span class="text-sm text-gray-500">Tanggal</span><span class="text-sm font-medium text-gray-800">{{ new Date(selectedTrx.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}</span></div>
+          <div class="flex justify-between"><span class="text-sm text-gray-500">Nomor Order</span><span class="text-sm font-medium text-gray-800">{{ selectedTrx.order_number }}</span></div>
           <div class="flex justify-between items-center"><span class="text-sm text-gray-500">Status</span><StatusBadge :status="selectedTrx.status" /></div>
         </div>
       </div>
@@ -184,28 +184,28 @@ const TYPE_LABELS: Record<string, string> = {
 const typeLabel = (type: string) => TYPE_LABELS[type] || type
 
 const STATUS_LABELS: Record<string, string> = {
-  waiting_payment: 'Menunggu Pembayaran',
-  waiting_confirm: 'Menunggu Konfirmasi',
-  approve: 'Disetujui',
-  completed: 'Selesai',
-  rejected: 'Ditolak',
+  pending: 'Menunggu Pembayaran',
+  paid: 'Pembayaran Diterima',
+  processing: 'Sedang Diproses',
+  settled: 'Selesai',
+  failed: 'Gagal',
 }
 const statusLabel = (status: string) => STATUS_LABELS[status] || status
 
 const ORDER_PROGRESS: Record<string, number> = {
-  waiting_payment: 25,
-  waiting_confirm: 50,
-  approve: 75,
-  completed: 100,
+  pending: 25,
+  paid: 50,
+  processing: 75,
+  settled: 100,
 }
 const orderProgress = (status: string) => ORDER_PROGRESS[status] || 0
 
 const filteredTransactions = computed(() => {
   let result = transactions.value
   if (activeMainTab.value === 'orders') {
-    result = result.filter(t => !['completed', 'rejected'].includes(t.status))
+    result = result.filter(t => !['settled', 'failed'].includes(t.status))
   } else {
-    result = result.filter(t => ['completed', 'rejected'].includes(t.status))
+    result = result.filter(t => ['settled', 'failed'].includes(t.status))
   }
   return result
 })

@@ -89,11 +89,11 @@
         </div>
         <div class="flex-1 min-w-0">
           <p class="text-sm font-semibold text-slate-900 truncate">{{ fund.name }}</p>
-          <p class="text-xs text-slate-500">{{ fund.type }} • NAV: {{ formatIDR(fund.nav) }}</p>
+          <p class="text-xs text-slate-500">{{ fund.fund_type_label || fund.fund_type }} • NAV: {{ formatIDR(fund.nav_per_unit) }}</p>
         </div>
         <div class="text-right">
-          <p class="text-sm font-semibold" :class="fund.return_1y >= 0 ? 'text-green-600' : 'text-red-500'">
-            {{ fund.return_1y >= 0 ? '+' : '' }}{{ fund.return_1y?.toFixed(2) }}%
+          <p class="text-sm font-semibold" :class="(fund.performance_1yr ?? 0) >= 0 ? 'text-green-600' : 'text-red-500'">
+            {{ (fund.performance_1yr ?? 0) >= 0 ? '+' : '' }}{{ fund.performance_1yr?.toFixed(2) ?? '0.00' }}%
           </p>
           <p class="text-xs text-slate-400">1 Tahun</p>
         </div>
@@ -135,7 +135,7 @@
             <span class="font-semibold text-primary-800">{{ estimatedUnits.toFixed(4) }} unit</span>
           </div>
           <div class="flex justify-between text-xs mt-1">
-            <span class="text-primary-600">Biaya Pembelian ({{ fund.buy_fee || 0 }}%)</span>
+            <span class="text-primary-600">Biaya Pembelian ({{ fund.subscription_fee || 0 }}%)</span>
             <span class="text-primary-700">{{ formatIDR(buyFee) }}</span>
           </div>
         </div>
@@ -230,21 +230,24 @@ const paymentDeadline = computed(() => {
 
 const form = reactive({
   amount: 0,
-  payment_method: 'va',
+  payment_method: 'va_bca',
 })
 
 const quickAmounts = [100000, 500000, 1000000, 5000000]
 
 const paymentMethods = [
-  { value: 'va', label: 'Virtual Account', desc: 'Transfer via VA BCA, BNI, BRI, Mandiri' },
-  { value: 'transfer', label: 'Transfer Bank', desc: 'Transfer langsung ke rekening PT Victoria Sekuritas' },
+  { value: 'va_bca', label: 'Virtual Account BCA', desc: 'Transfer via VA BCA' },
+  { value: 'va_bni', label: 'Virtual Account BNI', desc: 'Transfer via VA BNI' },
+  { value: 'va_bri', label: 'Virtual Account BRI', desc: 'Transfer via VA BRI' },
+  { value: 'va_mandiri', label: 'Virtual Account Mandiri', desc: 'Transfer via VA Mandiri' },
+  { value: 'qris', label: 'QRIS', desc: 'Scan QR Code via aplikasi dompet digital' },
 ]
 
-const buyFee = computed(() => form.amount * ((fund.value?.buy_fee || 0) / 100))
+const buyFee = computed(() => form.amount * ((fund.value?.subscription_fee || 0) / 100))
 const totalAmount = computed(() => form.amount + buyFee.value)
 const estimatedUnits = computed(() => {
-  if (!fund.value?.nav || form.amount <= 0) return 0
-  return form.amount / fund.value.nav
+  if (!fund.value?.nav_per_unit || form.amount <= 0) return 0
+  return form.amount / fund.value.nav_per_unit
 })
 
 const canSubmit = computed(() =>
@@ -276,7 +279,7 @@ const submitOrder = async () => {
   loading.value = true
   try {
     await post('/transactions/subscribe', {
-      fund_code: fundCode.value,
+      fund_id: parseInt(fundId.value),
       amount: form.amount,
       payment_method: form.payment_method,
     })
