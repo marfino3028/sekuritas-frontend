@@ -1,37 +1,36 @@
 import type { Config } from 'tailwindcss'
 
 // ============================================================
-// Design System — "Victoria Merah" (warna brand asli Victoria Sekuritas)
-// Brand mark = ornamen MERAH #A40001, wordmark hitam, di atas netral hangat.
-// Palet dari logo: #a40001 #f0f3ec #c67177 #d59997 #fffdfc #e2dad3 #d2d7d3
-// Token `primary`(merah) & `accent`(rose) + alias `teal`->merah agar kelas lama ikut.
+// Design System — Danapathi Asset Management
+// Sumber: CSS asli danapathi.co.id (lihat sekuritas-infra/DESIGN_DANAPATHI.md).
+// Navy = semua teks/judul/tombol utama, hijau = aksen kecil (CTA, angka naik).
+// Nama token `primary`(navy) & `accent`(hijau) dipertahankan agar kelas lama ikut.
 // ============================================================
 
-const red = {
-  50: '#FBEAEA',
-  100: '#F6D0D1',
-  200: '#EBA6A8',
-  300: '#DE7F81',
-  400: '#C85155',
-  500: '#A40001', // brand
-  600: '#8F0001',
-  700: '#7D0001',
-  800: '#630001',
-  900: '#4A0000',
+const navy = {
+  50: '#EEF3F9',
+  100: '#D9E3EF',
+  200: '#B3C6DD',
+  300: '#8AA5C6',
+  400: '#4F6F97',
+  500: '#234A74', // link
+  600: '#14365F', // tombol utama / judul section
+  700: '#0F2F5F', // tab aktif, angka NAB
+  800: '#082C53', // judul hero
+  900: '#00214A', // heading & logo
 }
 
-// Aksen rose (turunan lembut dari merah — memakai #d59997 & #c67177 dari logo)
-const rose = {
-  50: '#FBF1F1',
-  100: '#F5DEDF',
-  200: '#EAC1C3',
-  300: '#D59997', // dari logo
-  400: '#C67177', // dari logo
-  500: '#B85A61',
-  600: '#A0474E',
-  700: '#83383E',
-  800: '#6B2E33',
-  900: '#59272B',
+const green = {
+  50: '#E9F5EF',
+  100: '#CDEBDC',
+  200: '#9FD6BB',
+  300: '#6CBF96',
+  400: '#3AA672',
+  500: '#198754', // aksen utama
+  600: '#157347', // hover
+  700: '#146B40',
+  800: '#0F5533',
+  900: '#0B4027',
 }
 
 export default {
@@ -46,34 +45,57 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: red,
-        accent: rose,
-        teal: red, // alias pengaman: kelas teal-* lama -> merah
-        // Netral hangat brand
-        cream: '#F0F3EC',
-        paper: '#FFFDFC',
-        sand: '#E2DAD3',
-        mist: '#D2D7D3',
+        primary: navy,
+        accent: green,
+        teal: navy, // alias pengaman kelas teal-* lama
+        ink: { DEFAULT: '#617286', desc: '#5F7084', muted: '#64748B' },
+        surface: { page: '#F9FAFB', soft: '#F8FAFC', hero: '#F5F7FB' },
+        footer: '#1A4978',
+        up: '#1F8A5B',
+        down: '#D84B4B',
+        warn: '#EBBA45',
+        // Netral lama (dipakai beberapa halaman) → netral dingin Danapathi
+        cream: '#F8FAFC',
+        paper: '#FFFFFF',
+        sand: '#E5E7EB',
+        mist: '#E2E8F0',
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
       },
+      letterSpacing: {
+        heading: '-0.04em',
+        eyebrow: '0.14em',
+      },
+      maxWidth: {
+        container: '1360px',
+      },
       borderRadius: {
-        card: '20px',
+        btnsm: '12px',
+        btn: '18px',
+        input: '16px',
+        card: '22px',
+        strip: '28px',
+        panel: '30px',
+        box: '34px',
         '2xl': '18px',
         '3xl': '24px',
       },
       boxShadow: {
-        // soft, layered, merah-tinted
-        card: '0 1px 2px rgba(164,0,1,0.04), 0 12px 32px -12px rgba(164,0,1,0.18)',
-        'card-hover': '0 2px 4px rgba(164,0,1,0.06), 0 20px 40px -16px rgba(164,0,1,0.26)',
-        soft: '0 8px 24px -10px rgba(125,0,1,0.16)',
+        // sangat tipis, di-tint navy (gaya Danapathi)
+        card: '0 2px 10px rgba(16,47,85,0.04)',
+        'card-hover': '0 14px 34px rgba(16,47,85,0.08)',
+        soft: '0 4px 18px rgba(15,53,103,0.06)',
+        strip: '0 12px 40px rgba(15,23,42,0.08)',
+        cta: '0 8px 18px rgba(25,135,84,0.25)',
       },
       backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #7D0001 0%, #A40001 45%, #C67177 100%)',
-        'brand-soft': 'linear-gradient(135deg, #FBEAEA 0%, #F0F3EC 100%)',
+        'brand-gradient': 'linear-gradient(160deg, #14365F 0%, #0F2F55 100%)',
+        'brand-soft': 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)',
+        trust: 'linear-gradient(135deg, #0F3D75 0%, #1F4F87 100%)',
+        'hero-fade': 'linear-gradient(90deg, rgba(248,249,251,.97) 0%, rgba(248,249,251,.9) 35%, rgba(248,249,251,.62) 55%, rgba(248,249,251,.2) 75%, rgba(248,249,251,0) 100%)',
       },
     },
   },

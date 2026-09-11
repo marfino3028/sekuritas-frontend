@@ -1,22 +1,12 @@
 <template>
-  <div class="min-h-screen bg-brand-soft flex">
+  <div class="min-h-screen bg-surface-page flex font-sans">
     <!-- Sidebar (desktop) -->
     <aside class="hidden lg:flex flex-col w-64 fixed h-full z-30 bg-brand-gradient overflow-hidden">
       <!-- Soft gradient orbs -->
-      <div class="pointer-events-none absolute -top-16 -right-20 w-56 h-56 rounded-full bg-accent-400/30 blur-3xl"></div>
-      <div class="pointer-events-none absolute bottom-24 -left-16 w-48 h-48 rounded-full bg-primary-300/20 blur-3xl"></div>
 
       <!-- Logo -->
       <div class="relative flex items-center px-6 py-6 border-b border-white/10">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-soft bg-white shadow-soft">
-            <img src="/logo.png" alt="Victoria Sekuritas" class="w-7 h-7 object-contain" />
-          </div>
-          <div>
-            <p class="text-white font-display font-extrabold text-[17px] tracking-tight leading-none">Victoria Sekuritas</p>
-            <p class="text-[11px] font-medium leading-none mt-1 text-accent-200">Reksa Dana</p>
-          </div>
-        </div>
+        <NuxtLink to="/dashboard"><img src="/logo-white.png" alt="Danapathi Asset Management" class="h-10 w-auto" /></NuxtLink>
       </div>
 
       <!-- Nav links -->
@@ -27,7 +17,7 @@
           :to="item.to"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150"
           :class="isActive(item.to)
-            ? 'text-white bg-white/15 ring-1 ring-white/20 shadow-soft'
+            ? 'text-white bg-white/10 ring-1 ring-white/15 border-l-[3px] border-accent-400'
             : 'text-white/70 hover:text-white hover:bg-white/10'"
         >
           <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
@@ -102,17 +92,8 @@
     >
       <div class="absolute inset-0 bg-primary-900/60 backdrop-blur-sm"></div>
       <aside class="absolute left-0 top-0 h-full w-72 flex flex-col bg-brand-gradient overflow-hidden">
-        <div class="pointer-events-none absolute -top-16 -right-16 w-48 h-48 rounded-full bg-accent-400/30 blur-3xl"></div>
         <div class="relative flex items-center justify-between px-5 py-5 border-b border-white/10">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-white shadow-soft">
-              <img src="/logo.png" alt="Victoria Sekuritas" class="w-7 h-7 object-contain" />
-            </div>
-            <div>
-              <p class="text-white font-display font-extrabold text-base tracking-tight leading-none">Victoria Sekuritas</p>
-              <p class="text-xs font-medium leading-none mt-1 text-accent-200">Reksa Dana</p>
-            </div>
-          </div>
+          <img src="/logo-white.png" alt="Danapathi Asset Management" class="h-9 w-auto" />
           <button @click.stop="mobileMenuOpen = false"
                   class="p-1.5 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +169,7 @@ const pageTitle = computed(() => {
     '/pembukaan-rekening/ekyc': 'Verifikasi eKYC',
     '/pembukaan-rekening/data': 'Lengkapi Data',
   }
-  return titles[route.path] || 'Victoria Sekuritas'
+  return titles[route.path] || 'Danapathi'
 })
 
 const isActive = (path: string) => {

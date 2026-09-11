@@ -46,7 +46,7 @@
 
               <label class="flex items-start gap-3 text-sm text-slate-600">
                 <input v-model="agree" type="checkbox" class="mt-0.5 rounded border-slate-300 text-primary-600 focus:ring-primary-500" />
-                <span>Saya menyetujui <a href="#" class="text-primary-600 font-semibold">Syarat &amp; Ketentuan</a> dan <a href="#" class="text-primary-600 font-semibold">Kebijakan Privasi</a> PT Victoria Sekuritas Indonesia.</span>
+                <span>Saya menyetujui <a href="#" class="text-primary-600 font-semibold">Syarat &amp; Ketentuan</a> dan <a href="#" class="text-primary-600 font-semibold">Kebijakan Privasi</a> PT Danapathi Asset Management.</span>
               </label>
 
               <button type="submit" :disabled="!canSubmit || authStore.loading"
@@ -95,5 +95,5 @@ const submit = async () => {
   }
 }
 
-useHead({ title: 'Daftar — Victoria Sekuritas' })
+useHead({ title: 'Daftar — Danapathi' })
 </script>

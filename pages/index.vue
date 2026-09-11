@@ -1,330 +1,246 @@
 <template>
-  <div class="min-h-screen bg-white">
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-xl border-b border-slate-100 z-50">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <NuxtLink to="/" class="flex items-center gap-2.5">
-          <img src="/logo.png" alt="Victoria Sekuritas" class="w-9 h-9 object-contain" />
-          <span class="text-xl font-display font-extrabold tracking-tight text-slate-900">Victoria Sekuritas</span>
-        </NuxtLink>
-        <!-- Menu tengah -->
-        <nav class="hidden md:flex items-center gap-1">
-          <NuxtLink v-for="item in navItems" :key="item.to" :to="item.to"
-            class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-primary-700 hover:bg-primary-50/60 transition-colors">
-            {{ item.label }}
+  <div>
+    <!-- ================= HERO ================= -->
+    <section class="relative bg-surface-hero overflow-hidden">
+      <img src="/images/hero.jpg" alt="" class="absolute inset-y-0 right-0 h-full w-full lg:w-[68%] object-cover object-center" />
+      <div class="absolute inset-0 bg-hero-fade"></div>
+      <div class="absolute inset-0 bg-white/60 lg:hidden"></div>
+
+      <div class="relative max-w-container mx-auto px-4 sm:px-6 lg:px-8 pt-14 lg:pt-24 pb-40 lg:pb-48">
+        <div class="max-w-2xl">
+          <span class="inline-flex items-center rounded-full bg-white/80 border border-primary-600/10 px-5 py-2.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-eyebrow text-primary-600 mb-7">
+            Danapathi Asset Management
+          </span>
+          <h1 class="font-display font-bold text-[40px] sm:text-[52px] lg:text-[68px] leading-[1.06] tracking-[-0.03em] mb-6">
+            <span class="block text-primary-800 font-extrabold">Investasi Reksa Dana</span>
+            <span class="block text-accent-500 font-semibold">Buka Rekening Online</span>
+          </h1>
+          <p class="text-[16px] lg:text-[17px] leading-[1.7] text-[#5F6F7F] mb-9 max-w-xl">
+            Mulai berinvestasi pada reksa dana Danapathi langsung dari ponsel Anda. Verifikasi identitas
+            dengan e-KTP &amp; swafoto, tanda tangan digital, tanpa perlu datang ke kantor.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <NuxtLink to="/register" class="btn-primary">Buka Rekening Sekarang</NuxtLink>
+            <NuxtLink to="/produk" class="btn-secondary">Lihat Produk</NuxtLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust strip menumpuk di bawah hero -->
+    <section class="relative z-10 -mt-28 lg:-mt-32">
+      <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 bg-white rounded-strip shadow-strip overflow-hidden">
+          <div class="bg-trust text-white p-7 lg:p-8 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-white/10 grid place-items-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a6 6 0 100-12 6 6 0 000 12zm0 0l-3.5 6 3.5-1.5 3.5 1.5L12 15z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs text-white/70 mb-1">Dipercaya Investor</p>
+              <p class="font-display font-bold text-xl leading-tight tracking-[-0.02em]">Manajer Investasi Profesional</p>
+            </div>
+          </div>
+          <div v-for="t in trust" :key="t.title" class="p-7 lg:p-8 text-center border-t md:border-t-0 md:border-l border-slate-100">
+            <div class="w-11 h-11 mx-auto mb-3 rounded-xl bg-surface-soft grid place-items-center text-primary-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" :d="t.icon"/></svg>
+            </div>
+            <p class="font-display font-bold text-primary-900 mb-1">{{ t.title }}</p>
+            <p class="text-sm text-ink leading-relaxed">{{ t.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRODUK UNGGULAN ================= -->
+    <section class="py-16 lg:py-20">
+      <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-10">
+          <div>
+            <span class="eyebrow eyebrow-bar mb-3">Produk Unggulan</span>
+            <h2 class="h-section">Reksa Dana Danapathi</h2>
+          </div>
+          <NuxtLink to="/produk" class="btn-outline self-start sm:self-auto">
+            Lihat Semua Produk
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
           </NuxtLink>
-        </nav>
-        <div class="flex items-center gap-3">
-          <NuxtLink to="/login" class="text-sm font-semibold text-primary-700 hover:text-primary-800 transition-colors">
-            Masuk
-          </NuxtLink>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <NuxtLink
-            to="/register"
-            class="bg-primary-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-primary-700 shadow-soft transition-all"
+            v-for="f in funds"
+            :key="f.id"
+            :to="`/produk/${f.id}`"
+            class="group bg-white rounded-card border border-primary-900/[0.06] shadow-card p-6 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200"
           >
-            Daftar Gratis
-          </NuxtLink>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden pt-32 pb-24 bg-brand-gradient text-white">
-      <!-- soft gradient orbs -->
-      <div class="pointer-events-none absolute -top-24 -right-20 w-96 h-96 rounded-full bg-accent-400/30 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-32 -left-24 w-96 h-96 rounded-full bg-primary-300/20 blur-3xl"></div>
-
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="grid lg:grid-cols-12 gap-12 items-center">
-          <!-- Left: asymmetric, wider, left-aligned heading -->
-          <div class="lg:col-span-7">
-            <div class="inline-flex items-center gap-2 bg-white/10 ring-1 ring-white/20 rounded-full px-4 py-1.5 text-sm mb-7">
-              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              Berizin dan Diawasi OJK
-            </div>
-            <h1 class="font-display font-extrabold tracking-tight text-5xl lg:text-6xl leading-[1.05] mb-6">
-              Mulai Investasi
-              <span class="block text-accent-200">Reksa Dana</span>
-              Sekarang
-            </h1>
-            <p class="text-primary-100 text-lg mb-9 leading-relaxed max-w-xl">
-              Investasi mudah, aman, dan terjangkau. Mulai dari Rp10.000 saja.
-              Kelola portofolio reksa dana Anda kapan saja dan di mana saja.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3 mb-10">
-              <NuxtLink
-                to="/register"
-                class="bg-white text-primary-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-primary-50 shadow-soft transition-all text-center"
-              >
-                Mulai Investasi
-              </NuxtLink>
-              <NuxtLink
-                to="/produk"
-                class="bg-white/10 ring-1 ring-white/40 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/20 transition-all text-center"
-              >
-                Lihat Produk
-              </NuxtLink>
-            </div>
-
-            <!-- stat pills -->
-            <div class="flex flex-wrap gap-3">
-              <div class="inline-flex items-baseline gap-2 bg-white/10 ring-1 ring-white/15 rounded-full px-4 py-2">
-                <span class="text-lg font-bold">50.000+</span>
-                <span class="text-primary-200 text-xs">Total Pengguna</span>
-              </div>
-              <div class="inline-flex items-baseline gap-2 bg-white/10 ring-1 ring-white/15 rounded-full px-4 py-2">
-                <span class="text-lg font-bold">200+</span>
-                <span class="text-primary-200 text-xs">Produk Reksa Dana</span>
-              </div>
-              <div class="inline-flex items-baseline gap-2 bg-white/10 ring-1 ring-white/15 rounded-full px-4 py-2">
-                <span class="text-lg font-bold">Rp2 T+</span>
-                <span class="text-primary-200 text-xs">Dana Kelolaan</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: floating performance card -->
-          <div class="hidden lg:block lg:col-span-5">
-            <div class="bg-white/10 backdrop-blur-xl rounded-card p-6 ring-1 ring-white/20 shadow-soft">
-              <div class="flex items-center justify-between mb-5">
-                <div>
-                  <p class="text-primary-200 text-xs mb-1">Return Terbaik</p>
-                  <p class="text-3xl font-display font-extrabold text-green-300">+32%</p>
-                </div>
-                <div class="text-right">
-                  <p class="text-primary-200 text-xs mb-1">Dana Kelolaan</p>
-                  <p class="text-xl font-bold">Rp2 T+</p>
-                </div>
-              </div>
-              <!-- Mini chart placeholder -->
-              <div class="h-28 flex items-end gap-1.5">
-                <div v-for="(h, i) in chartBars" :key="i"
-                  class="flex-1 bg-gradient-to-t from-white/20 to-white/60 rounded-t-md transition-all"
-                  :style="{ height: h + '%' }"
-                ></div>
-              </div>
-              <p class="text-primary-200 text-xs mt-3 text-center">Pertumbuhan NAV 12 Bulan Terakhir</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-24 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="max-w-2xl mb-14">
-          <span class="text-accent-600 font-semibold text-sm uppercase tracking-wider">Keunggulan</span>
-          <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-4">Kenapa Memilih Victoria Sekuritas?</h2>
-          <p class="text-slate-500 text-lg">Platform investasi reksa dana modern yang aman, transparan, dan mudah digunakan.</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <div v-for="feature in features" :key="feature.title"
-            class="rounded-card bg-white border border-slate-100 shadow-card p-6 hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
-          >
-            <div class="w-14 h-14 bg-brand-soft ring-1 ring-primary-50 rounded-2xl flex items-center justify-center mb-5">
-              <span class="text-2xl">{{ feature.icon }}</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">{{ feature.title }}</h3>
-            <p class="text-slate-500 text-sm leading-relaxed">{{ feature.desc }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Fund types section -->
-    <section class="py-24 bg-brand-soft">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="max-w-2xl mb-12">
-          <span class="text-accent-600 font-semibold text-sm uppercase tracking-wider">Produk</span>
-          <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-3">Pilihan Reksa Dana</h2>
-          <p class="text-slate-500 text-lg">Berbagai pilihan produk untuk semua profil risiko</p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div v-for="type in fundTypes" :key="type.name"
-            class="group flex flex-col rounded-card bg-white p-6 border border-slate-100 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all cursor-pointer"
-          >
-            <div class="w-12 h-12 bg-brand-soft ring-1 ring-primary-50 rounded-2xl flex items-center justify-center text-2xl mb-5">{{ type.icon }}</div>
-            <h3 class="font-bold text-slate-900 text-base mb-1.5">{{ type.name }}</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">{{ type.desc }}</p>
-            <div class="mt-5 pt-4 border-t border-slate-100">
-              <span class="text-sm font-bold" :class="type.returnColor">{{ type.return }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Steps section -->
-    <section class="py-24 bg-white">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-14">
-          <span class="text-accent-600 font-semibold text-sm uppercase tracking-wider">Langkah Mudah</span>
-          <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-3">Cara Mulai Investasi</h2>
-          <p class="text-slate-500 text-lg">Hanya 3 langkah mudah untuk mulai berinvestasi</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <div v-for="(step, i) in steps" :key="i"
-            class="rounded-card bg-white border border-slate-100 shadow-card p-6 hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
-          >
-            <div class="w-12 h-12 bg-brand-gradient text-white rounded-2xl flex items-center justify-center text-xl font-display font-extrabold mb-5 shadow-soft">
-              {{ i + 1 }}
-            </div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">{{ step.title }}</h3>
-            <p class="text-slate-500 text-sm leading-relaxed">{{ step.desc }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Berita & Artikel Terbaru -->
-    <section v-if="articles.length" class="py-24 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
-          <div class="max-w-2xl">
-            <span class="text-accent-600 font-semibold text-sm uppercase tracking-wider">Wawasan</span>
-            <h2 class="font-display font-extrabold tracking-tight text-4xl text-slate-900 mt-2 mb-3">Berita & Artikel Terbaru</h2>
-            <p class="text-slate-500 text-lg">Update terkini seputar pasar modal, edukasi, dan tips investasi.</p>
-          </div>
-          <NuxtLink
-            to="/artikel"
-            class="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800 transition-colors"
-          >
-            Lihat Semua
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </NuxtLink>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <NuxtLink
-            v-for="article in articles"
-            :key="article.id"
-            :to="`/artikel/${article.slug}`"
-            class="group flex flex-col rounded-card bg-white border border-slate-100 shadow-card overflow-hidden hover:shadow-card-hover hover:-translate-y-0.5 transition-all"
-          >
-            <!-- Cover: image if available, else branded gradient -->
-            <div class="relative h-44 overflow-hidden" :class="categoryGradient(article.category)">
-              <img
-                v-if="article.image_url"
-                :src="article.image_url"
-                :alt="article.title"
-                class="absolute inset-0 w-full h-full object-cover"
-              />
-              <div v-else class="absolute inset-0 flex items-center justify-center">
-                <!-- chart motif -->
-                <svg class="w-20 h-20 text-white/20" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
-                <div class="pointer-events-none absolute -bottom-8 -right-6 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
-              </div>
-              <span
-                v-if="article.category"
-                class="absolute top-4 left-4 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold shadow-soft"
-                :class="categoryBadge(article.category)"
-              >
-                {{ article.category }}
+            <span class="inline-flex rounded-full bg-surface-soft px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-[#5D7288] mb-4">
+              {{ f.fund_type_label }}
+            </span>
+            <h3 class="font-display font-bold text-[17px] leading-snug text-primary-900 mb-6 min-h-[48px] group-hover:text-primary-600">{{ f.name }}</h3>
+            <p class="text-xs text-ink-muted mb-1">NAB / Unit</p>
+            <p class="font-display font-bold text-[26px] tracking-[-0.045em] text-primary-700 mb-3">{{ formatNab(f.nav_per_unit) }}</p>
+            <p class="text-xs text-ink-muted">
+              Return 1 Tahun
+              <span class="font-bold ml-1" :class="f.performance_1yr >= 0 ? 'text-up' : 'text-down'">
+                {{ f.performance_1yr >= 0 ? '▲' : '▼' }} {{ Math.abs(f.performance_1yr).toFixed(2) }}%
               </span>
-            </div>
+            </p>
+          </NuxtLink>
+        </div>
+        <p v-if="navDate" class="text-xs text-ink-muted mt-5">NAB per {{ navDate }}</p>
+      </div>
+    </section>
 
-            <div class="flex flex-col flex-1 p-6">
-              <h3 class="font-display font-extrabold tracking-tight text-lg text-slate-900 leading-snug mb-3 line-clamp-2 group-hover:text-primary-700 transition-colors">
-                {{ article.title }}
-              </h3>
-              <p v-if="article.excerpt" class="text-sm text-slate-500 leading-relaxed line-clamp-2 mb-5">{{ article.excerpt }}</p>
-              <p class="mt-auto text-xs text-slate-400">{{ formatArticleDate(article.published_at) }}</p>
+    <!-- ================= BUKA REKENING ONLINE (eKYC) ================= -->
+    <section class="py-16 lg:py-20 bg-brand-soft">
+      <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-5">
+            <span class="eyebrow eyebrow-bar mb-3">Pembukaan Rekening Online</span>
+            <h2 class="h-section mb-5">Cukup 10 Menit, Tanpa Tatap Muka</h2>
+            <p class="p-section mb-8">
+              Data e-KTP terbaca otomatis, wajah Anda dicocokkan dengan foto KTP, dan dokumen ditandatangani
+              secara digital. Tim kami memverifikasi, lalu rekening Anda aktif dan siap bertransaksi.
+            </p>
+            <NuxtLink to="/register" class="btn-primary">Mulai Buka Rekening</NuxtLink>
+          </div>
+          <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+            <div v-for="(s, i) in openSteps" :key="s.title" class="bg-white rounded-card border border-primary-900/[0.06] shadow-card p-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 rounded-xl bg-primary-600 text-white font-display font-bold grid place-items-center">{{ i + 1 }}</span>
+                <span class="text-[11px] font-bold uppercase tracking-[0.12em] text-accent-500">{{ s.tag }}</span>
+              </div>
+              <h3 class="font-display font-bold text-lg text-primary-900 mb-1.5">{{ s.title }}</h3>
+              <p class="text-sm leading-relaxed text-ink">{{ s.desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TENTANG + FAQ ================= -->
+    <section class="py-16 lg:py-20">
+      <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-panel border border-primary-900/[0.06] shadow-soft p-7 lg:p-10">
+          <span class="eyebrow eyebrow-bar mb-3">Tentang Kami</span>
+          <h2 class="font-display font-bold text-[28px] lg:text-[31px] leading-[1.15] tracking-heading text-primary-600 mb-4">Tentang Danapathi Asset Management</h2>
+          <p class="p-section mb-7">
+            PT Danapathi Asset Management adalah perusahaan manajer investasi yang menyediakan layanan pengelolaan
+            reksa dana untuk investor individu maupun institusi, dengan proses investasi yang disiplin dan terukur.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-3 mb-8">
+            <div v-for="b in benefits" :key="b.title" class="rounded-2xl bg-surface-soft p-5">
+              <p class="font-display font-bold text-primary-900 mb-1">{{ b.title }}</p>
+              <p class="text-sm text-ink leading-relaxed">{{ b.desc }}</p>
+            </div>
+          </div>
+          <NuxtLink to="/artikel" class="inline-flex items-center px-[22px] py-[13px] rounded-btn bg-primary-600 text-white text-sm font-display font-semibold hover:bg-accent-500 transition-colors">
+            Pelajari Lebih Lanjut
+          </NuxtLink>
+        </div>
+
+        <div class="bg-white rounded-panel border border-primary-900/[0.06] shadow-soft p-7 lg:p-10">
+          <span class="eyebrow eyebrow-bar mb-3">FAQ</span>
+          <h2 class="font-display font-bold text-[28px] lg:text-[31px] leading-[1.15] tracking-heading text-primary-600 mb-6">Pertanyaan Umum</h2>
+          <div class="space-y-3">
+            <div v-for="(q, i) in faqs" :key="i" class="rounded-2xl border border-slate-100 overflow-hidden">
+              <button class="w-full flex items-center gap-4 p-4 text-left" @click="openFaq = openFaq === i ? -1 : i">
+                <span class="w-8 h-8 rounded-full bg-primary-900 text-white text-xs font-bold grid place-items-center shrink-0">{{ String(i + 1).padStart(2, '0') }}</span>
+                <span class="flex-1 font-display font-semibold text-primary-900">{{ q.q }}</span>
+                <svg class="w-5 h-5 text-primary-600 transition-transform" :class="openFaq === i ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <p v-show="openFaq === i" class="px-4 pb-4 pl-16 text-sm leading-relaxed text-ink">{{ q.a }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SIMULASI INVESTASI ================= -->
+    <section class="py-16 lg:py-20 bg-brand-soft">
+      <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 bg-white rounded-box border border-primary-900/[0.06] shadow-soft overflow-hidden">
+          <div class="lg:col-span-4 bg-brand-gradient text-white p-8 lg:p-10">
+            <span class="text-[11px] font-bold uppercase tracking-eyebrow text-white/60">Simulasi Investasi</span>
+            <h2 class="font-display font-bold text-[30px] lg:text-[36px] leading-[1.1] tracking-[-0.045em] mt-3 mb-4">Hitung Potensi Hasil Investasi Anda</h2>
+            <p class="text-sm leading-relaxed text-white/75">Perkiraan menggunakan return 1 tahun terakhir produk. Bukan jaminan hasil di masa depan.</p>
+          </div>
+          <div class="lg:col-span-4 p-8 lg:p-10 space-y-5">
+            <div class="flex gap-2 p-1 bg-surface-soft rounded-2xl">
+              <button v-for="m in simModes" :key="m.key" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+                :class="sim.mode === m.key ? 'bg-primary-600 text-white' : 'text-primary-600'" @click="sim.mode = m.key">{{ m.label }}</button>
+            </div>
+            <label class="block">
+              <span class="text-sm font-semibold text-primary-900">Produk</span>
+              <select v-model="sim.fundId" class="mt-2 w-full rounded-input border-[#DBE2EA] text-sm text-primary-900 focus:border-primary-500 focus:ring-primary-500">
+                <option v-for="f in funds" :key="f.id" :value="f.id">{{ f.name }}</option>
+              </select>
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-primary-900">{{ sim.mode === 'rutin' ? 'Investasi per bulan' : 'Nominal investasi' }} (Rp)</span>
+              <input v-model.number="sim.amount" type="number" min="10000" step="100000" class="mt-2 w-full rounded-input border-[#DBE2EA] text-sm text-primary-900 focus:border-primary-500 focus:ring-primary-500" />
+            </label>
+            <label class="block">
+              <span class="text-sm font-semibold text-primary-900">Jangka waktu: {{ sim.years }} tahun</span>
+              <input v-model.number="sim.years" type="range" min="1" max="20" class="mt-3 w-full accent-primary-600" />
+            </label>
+          </div>
+          <div class="lg:col-span-4 p-8 lg:p-10 bg-surface-soft flex flex-col justify-center">
+            <p class="text-sm text-ink-muted">Total modal</p>
+            <p class="font-display font-bold text-2xl text-primary-900 mb-5">{{ formatRp(simResult.principal) }}</p>
+            <p class="text-sm text-ink-muted">Perkiraan nilai akhir</p>
+            <p class="font-display font-bold text-[34px] tracking-[-0.04em] text-primary-700 mb-2">{{ formatRp(simResult.final) }}</p>
+            <p class="text-sm font-semibold text-accent-500 mb-6">+ {{ formatRp(simResult.profit) }} potensi keuntungan</p>
+            <NuxtLink to="/register" class="btn-primary w-full">Mulai Investasi</NuxtLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ARTIKEL ================= -->
+    <section v-if="articles.length" class="py-16 lg:py-20">
+      <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-10">
+          <div>
+            <span class="eyebrow eyebrow-bar mb-3">Publikasi &amp; Informasi</span>
+            <h2 class="h-section">Berita &amp; Artikel Terbaru</h2>
+          </div>
+          <NuxtLink to="/artikel" class="btn-outline self-start sm:self-auto">
+            Lihat Semua Artikel
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </NuxtLink>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5">
+          <NuxtLink v-for="a in articles" :key="a.id" :to="`/artikel/${a.slug}`"
+            class="group bg-white rounded-card border border-primary-900/[0.06] shadow-card overflow-hidden hover:-translate-y-1 hover:shadow-card-hover transition-all">
+            <div class="relative h-44 bg-brand-gradient overflow-hidden">
+              <img v-if="a.image_url" :src="a.image_url" :alt="a.title" class="absolute inset-0 w-full h-full object-cover" />
+              <img v-else src="/logo-white.png" alt="" class="absolute inset-0 m-auto h-12 opacity-30" />
+              <span v-if="a.category" class="absolute top-4 left-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-primary-600">{{ a.category }}</span>
+            </div>
+            <div class="p-6">
+              <p class="text-xs text-ink-muted mb-2">{{ formatArticleDate(a.published_at) }}</p>
+              <h3 class="font-display font-bold text-lg leading-snug text-primary-900 line-clamp-2 group-hover:text-primary-600">{{ a.title }}</h3>
+              <p v-if="a.excerpt" class="text-sm text-ink leading-relaxed line-clamp-2 mt-2">{{ a.excerpt }}</p>
             </div>
           </NuxtLink>
         </div>
       </div>
     </section>
-
-    <!-- CTA Section -->
-    <section class="py-24 bg-brand-soft">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="relative overflow-hidden rounded-card bg-brand-gradient px-8 py-14 sm:px-14 text-center shadow-soft">
-          <div class="pointer-events-none absolute -top-16 -right-10 w-72 h-72 rounded-full bg-accent-400/30 blur-3xl"></div>
-          <div class="relative">
-            <h2 class="font-display font-extrabold tracking-tight text-4xl text-white mb-4">
-              Siap Mulai Investasi?
-            </h2>
-            <p class="text-primary-100 mb-9 text-lg max-w-2xl mx-auto">
-              Bergabung bersama lebih dari 50.000 investor yang sudah mempercayakan investasinya kepada kami.
-            </p>
-            <NuxtLink
-              to="/register"
-              class="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-primary-50 shadow-soft transition-all text-lg"
-            >
-              Daftar Sekarang — Gratis
-            </NuxtLink>
-            <p class="text-primary-200 text-sm mt-4">Tidak ada biaya pendaftaran. Mulai dari Rp10.000.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-primary-900 text-primary-200/80 py-14">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="grid md:grid-cols-4 gap-8 mb-10">
-          <div>
-            <div class="flex items-center gap-2.5 mb-3">
-              <div class="w-8 h-8 bg-white rounded-xl flex items-center justify-center">
-                <img src="/logo.png" alt="Victoria Sekuritas" class="w-6 h-6 object-contain" />
-              </div>
-              <span class="text-white font-display font-extrabold tracking-tight">Victoria Sekuritas</span>
-            </div>
-            <p class="text-sm text-primary-300/70">Platform investasi reksa dana terpercaya, berizin dan diawasi OJK.</p>
-          </div>
-          <div>
-            <h4 class="text-white font-semibold text-sm mb-3">Produk</h4>
-            <ul class="space-y-2 text-sm">
-              <li><NuxtLink to="/produk" class="hover:text-accent-300 transition-colors">Reksa Dana Pasar Uang</NuxtLink></li>
-              <li><NuxtLink to="/produk" class="hover:text-accent-300 transition-colors">Reksa Dana Pendapatan Tetap</NuxtLink></li>
-              <li><NuxtLink to="/produk" class="hover:text-accent-300 transition-colors">Reksa Dana Campuran</NuxtLink></li>
-              <li><NuxtLink to="/produk" class="hover:text-accent-300 transition-colors">Reksa Dana Saham</NuxtLink></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-white font-semibold text-sm mb-3">Perusahaan</h4>
-            <ul class="space-y-2 text-sm">
-              <li><a href="#" class="hover:text-accent-300 transition-colors">Tentang Kami</a></li>
-              <li><a href="#" class="hover:text-accent-300 transition-colors">Karir</a></li>
-              <li><a href="#" class="hover:text-accent-300 transition-colors">Blog</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-white font-semibold text-sm mb-3">Legal</h4>
-            <ul class="space-y-2 text-sm">
-              <li><a href="#" class="hover:text-accent-300 transition-colors">Syarat & Ketentuan</a></li>
-              <li><a href="#" class="hover:text-accent-300 transition-colors">Kebijakan Privasi</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="border-t border-white/10 pt-6 text-center text-xs text-primary-300/60">
-          &copy; {{ new Date().getFullYear() }} PT Victoria Sekuritas Indonesia. Berizin dan Diawasi OJK.
-          Investasi mengandung risiko. Kinerja masa lalu tidak menjamin kinerja masa depan.
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: false })
+definePageMeta({ layout: 'public' })
+useHead({ title: 'Danapathi Asset Management — Investasi Reksa Dana Online' })
 
-const navItems = [
-  { to: '/produk', label: 'Reksa Dana' },
-  { to: '/manajer-investasi', label: 'Manajer Investasi' },
-  { to: '/bandingkan', label: 'Bandingkan' },
-  { to: '/promo', label: 'Promo' },
-  { to: '/artikel', label: 'Artikel' },
-]
-
+interface Fund {
+  id: number
+  name: string
+  fund_type_label: string
+  nav_per_unit: number
+  nav_date: string
+  performance_1yr: number
+}
 interface Article {
   id: number | string
   title: string
@@ -335,94 +251,79 @@ interface Article {
   published_at: string | null
 }
 
-const chartBars = [40, 55, 45, 60, 52, 68, 72, 65, 78, 82, 75, 90]
-
-// Berita & Artikel Terbaru
 const { get } = useApi()
+const funds = ref<Fund[]>([])
 const articles = ref<Article[]>([])
 
 try {
-  const res = await get<{ success: boolean; data: Article[] }>('/articles', { per_page: 3 })
+  const res = await get<any>('/products', { per_page: 5 })
+  const list = res?.data?.data ?? res?.data ?? []
+  funds.value = list.map((f: any) => ({ ...f, nav_per_unit: Number(f.nav_per_unit), performance_1yr: Number(f.performance_1yr) }))
+} catch { funds.value = [] }
+
+try {
+  const res = await get<{ data: Article[] }>('/articles', { per_page: 3 })
   articles.value = res?.data ?? []
-} catch {
-  // Sembunyikan section bila fetch gagal
-  articles.value = []
-}
+} catch { articles.value = [] }
 
-const formatArticleDate = (date: string | null): string => {
-  if (!date) return ''
-  return new Date(date).toLocaleDateString('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
+const navDate = computed(() => {
+  const d = funds.value[0]?.nav_date
+  return d ? new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : ''
+})
 
-// Palet badge kategori — warna beda per kategori
-const categoryBadge = (category: string | null): string => {
-  const map: Record<string, string> = {
-    'Berita Pasar': 'bg-primary-50 text-primary-700',
-    Edukasi: 'bg-accent-50 text-accent-700',
-    Tips: 'bg-emerald-50 text-emerald-700',
-    Analisis: 'bg-amber-50 text-amber-700',
+const formatNab = (n: number) => n.toLocaleString('id-ID', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
+const formatRp = (n: number) => 'Rp' + Math.round(n).toLocaleString('id-ID')
+const formatArticleDate = (d: string | null) =>
+  d ? new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+
+// ---------- Simulasi ----------
+const simModes = [{ key: 'sekali', label: 'Sekali' }, { key: 'rutin', label: 'Rutin' }] as const
+const sim = reactive<{ mode: 'sekali' | 'rutin'; fundId: number | null; amount: number; years: number }>({
+  mode: 'sekali', fundId: null, amount: 10_000_000, years: 5,
+})
+watch(funds, (list) => { if (!sim.fundId && list.length) sim.fundId = list[0].id }, { immediate: true })
+
+const simResult = computed(() => {
+  const f = funds.value.find((x) => x.id === sim.fundId)
+  const r = (f?.performance_1yr ?? 6) / 100
+  const amount = Math.max(0, sim.amount || 0)
+  if (sim.mode === 'sekali') {
+    const final = amount * Math.pow(1 + r, sim.years)
+    return { principal: amount, final, profit: final - amount }
   }
-  return map[category ?? ''] ?? 'bg-white/90 text-slate-700'
-}
+  const months = sim.years * 12
+  const rm = Math.pow(1 + r, 1 / 12) - 1
+  const final = rm > 0 ? amount * ((Math.pow(1 + rm, months) - 1) / rm) * (1 + rm) : amount * months
+  return { principal: amount * months, final, profit: final - amount * months }
+})
 
-// Gradient cover branded per kategori
-const categoryGradient = (category: string | null): string => {
-  const map: Record<string, string> = {
-    'Berita Pasar': 'bg-gradient-to-br from-primary-600 to-accent-600',
-    Edukasi: 'bg-gradient-to-br from-accent-600 to-primary-700',
-    Tips: 'bg-gradient-to-br from-emerald-500 to-primary-600',
-    Analisis: 'bg-gradient-to-br from-amber-500 to-accent-600',
-  }
-  return map[category ?? ''] ?? 'bg-brand-gradient'
-}
+// ---------- Konten statis ----------
+const openFaq = ref(0)
 
-const features = [
-  {
-    icon: '🔒',
-    title: 'Aman & Terpercaya',
-    desc: 'Dana Anda disimpan pada bank kustodian teregulasi. Berizin dan diawasi langsung oleh OJK.',
-  },
-  {
-    icon: '💰',
-    title: 'Modal Terjangkau',
-    desc: 'Mulai investasi hanya dengan Rp10.000. Tidak perlu modal besar untuk mulai berinvestasi.',
-  },
-  {
-    icon: '📱',
-    title: 'Mudah & Praktis',
-    desc: 'Beli, jual, dan pantau portofolio Anda kapan saja dan di mana saja melalui aplikasi.',
-  },
-  {
-    icon: '📊',
-    title: 'Produk Terlengkap',
-    desc: 'Pilihan ratusan reksa dana dari manajer investasi terkemuka di Indonesia.',
-  },
-  {
-    icon: '⚡',
-    title: 'Proses Cepat',
-    desc: 'Pendaftaran dan verifikasi KYC yang mudah, transaksi dapat diproses pada hari bursa.',
-  },
-  {
-    icon: '🎯',
-    title: 'Sesuai Profil Risiko',
-    desc: 'Rekomendasi produk yang disesuaikan dengan tujuan keuangan dan toleransi risiko Anda.',
-  },
+const trust = [
+  { title: 'Berizin dan Diawasi OJK', desc: 'Danapathi Asset Management berizin dan diawasi oleh OJK.', icon: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zm-3 9l2 2 4-4' },
+  { title: 'Bank Kustodian', desc: 'Dana investasi disimpan melalui bank kustodian independen.', icon: 'M3 21h18M5 21V10m4 11V10m6 11V10m4 11V10M2 10l10-6 10 6' },
+  { title: 'Rekening 100% Online', desc: 'Verifikasi e-KTP, swafoto, dan tanda tangan digital.', icon: 'M8 3h8a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V5a2 2 0 012-2zm3 15h2' },
 ]
 
-const fundTypes = [
-  { icon: '💵', name: 'Pasar Uang', desc: 'Risiko rendah, likuiditas tinggi', return: 'Return ~5-7% p.a', returnColor: 'text-primary-600' },
-  { icon: '📈', name: 'Pendapatan Tetap', desc: 'Risiko rendah-menengah', return: 'Return ~7-10% p.a', returnColor: 'text-primary-700' },
-  { icon: '⚖️', name: 'Campuran', desc: 'Risiko menengah', return: 'Return ~10-15% p.a', returnColor: 'text-accent-600' },
-  { icon: '🚀', name: 'Saham', desc: 'Potensi return tinggi', return: 'Return ~15-25% p.a', returnColor: 'text-green-600' },
+const openSteps = [
+  { tag: 'Akun', title: 'Daftar dengan Email', desc: 'Buat akun dan aktivasi lewat tautan yang dikirim ke email Anda.' },
+  { tag: 'e-KTP', title: 'Foto e-KTP', desc: 'Data NIK, nama, dan alamat terbaca otomatis untuk mengisi formulir.' },
+  { tag: 'Verifikasi Wajah', title: 'Swafoto dengan e-KTP', desc: 'Wajah dicocokkan dengan foto KTP disertai pemeriksaan keaslian (liveness).' },
+  { tag: 'Tanda Tangan', title: 'Tanda Tangan Digital', desc: 'Setujui dokumen secara digital. Setelah diverifikasi, siap berinvestasi.' },
 ]
 
-const steps = [
-  { title: 'Daftar Akun', desc: 'Masukkan nomor HP dan buat PIN keamanan Anda dalam hitungan menit.' },
-  { title: 'Verifikasi KYC', desc: 'Lengkapi data diri dan unggah KTP. Proses verifikasi 1-2 hari kerja.' },
-  { title: 'Mulai Investasi', desc: 'Pilih reksa dana yang sesuai dan mulai berinvestasi dari Rp10.000.' },
+const benefits = [
+  { title: 'Pengelolaan Profesional', desc: 'Dikelola tim manajer investasi berpengalaman.' },
+  { title: 'Pilihan Lengkap', desc: 'Pasar uang, pendapatan tetap, syariah, campuran, dan saham.' },
+  { title: 'Transparan', desc: 'NAB diperbarui setiap hari bursa.' },
+  { title: 'Mulai Terjangkau', desc: 'Investasi mulai dari Rp100.000.' },
+]
+
+const faqs = [
+  { q: 'Apa itu reksa dana?', a: 'Reksa dana adalah wadah untuk menghimpun dana dari investor yang kemudian diinvestasikan oleh Manajer Investasi ke dalam portofolio efek seperti saham, obligasi, dan instrumen pasar uang.' },
+  { q: 'Apa saja syarat membuka rekening?', a: 'Warga negara Indonesia berusia minimal 17 tahun dengan e-KTP, alamat email aktif, dan rekening bank atas nama sendiri. Seluruh proses dilakukan secara online.' },
+  { q: 'Berapa lama proses verifikasi?', a: 'Verifikasi otomatis berjalan dalam hitungan menit. Setelah itu tim kami meninjau data dan menerbitkan SID dalam 1 hari kerja.' },
+  { q: 'Apakah dana saya aman?', a: 'Dana investasi disimpan di bank kustodian yang terpisah dari kekayaan Manajer Investasi, dan kegiatan kami diawasi oleh OJK.' },
 ]
 </script>

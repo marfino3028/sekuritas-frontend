@@ -103,5 +103,5 @@ const join = async () => {
   }
 }
 
-useHead(() => ({ title: (event.value?.name || 'Promo') + ' — Victoria Sekuritas' }))
+useHead(() => ({ title: (event.value?.name || 'Promo') + ' — Danapathi' }))
 </script>

@@ -2,7 +2,7 @@
   <div class="max-w-6xl mx-auto px-4 py-8 lg:py-12">
     <div class="mb-8">
       <h1 class="text-3xl lg:text-4xl font-display font-extrabold tracking-tight text-slate-800">Promo & Event</h1>
-      <p class="text-slate-500 mt-2">Ikuti event Victoria Sekuritas dan dapatkan reward khusus melalui link undangan.</p>
+      <p class="text-slate-500 mt-2">Ikuti event Danapathi dan dapatkan reward khusus melalui link undangan.</p>
     </div>
 
     <!-- Loading -->
@@ -16,7 +16,7 @@
         <svg class="w-9 h-9 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 010 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 010-4V7a2 2 0 00-2-2H5z"/></svg>
       </div>
       <p class="text-lg font-bold text-slate-700">Belum ada promo berlangsung</p>
-      <p class="text-slate-500 text-sm mt-1">Nantikan info promo selanjutnya di website & media sosial Victoria Sekuritas.</p>
+      <p class="text-slate-500 text-sm mt-1">Nantikan info promo selanjutnya di website & media sosial Danapathi.</p>
       <NuxtLink to="/produk" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-brand-gradient text-white text-sm font-semibold rounded-xl shadow-card">
         Mulai Investasi
       </NuxtLink>
@@ -66,5 +66,5 @@ const fetchEvents = async () => {
 }
 onMounted(fetchEvents)
 
-useHead({ title: 'Promo & Event — Victoria Sekuritas' })
+useHead({ title: 'Promo & Event — Danapathi' })
 </script>

@@ -154,5 +154,5 @@ const managerRows = [
 ]
 const rows = computed<any[]>(() => (tab.value === 'funds' ? fundRows : managerRows))
 
-useHead({ title: 'Bandingkan — Victoria Sekuritas' })
+useHead({ title: 'Bandingkan — Danapathi' })
 </script>

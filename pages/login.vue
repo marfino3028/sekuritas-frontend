@@ -6,7 +6,7 @@
         <div class="relative">
           <span class="inline-flex items-center rounded-full bg-accent-100 text-accent-600 text-[11px] font-bold uppercase tracking-wider px-3 py-1 mb-3">Masuk</span>
           <h1 class="font-display text-3xl font-extrabold tracking-tight text-slate-900 mb-1.5">Selamat Datang</h1>
-          <p class="text-slate-500 text-sm mb-6">Masuk ke akun Victoria Sekuritas Anda.</p>
+          <p class="text-slate-500 text-sm mb-6">Masuk ke akun Danapathi Anda.</p>
 
           <p v-if="error" class="mb-4 p-3 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl">
             {{ error }}
@@ -80,5 +80,5 @@ const submit = async () => {
   }
 }
 
-useHead({ title: 'Masuk — Victoria Sekuritas' })
+useHead({ title: 'Masuk — Danapathi' })
 </script>

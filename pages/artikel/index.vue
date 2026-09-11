@@ -277,5 +277,5 @@ watch(activeCategory, fetchArticles)
 
 onMounted(fetchArticles)
 
-useHead({ title: 'Artikel & Berita — Victoria Sekuritas' })
+useHead({ title: 'Artikel & Berita — Danapathi' })
 </script>

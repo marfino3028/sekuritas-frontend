@@ -8,11 +8,11 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Victoria Sekuritas - Investasi Reksa Dana',
+      title: 'Danapathi Asset Management — Investasi Reksa Dana Online',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Platform investasi reksa dana terpercaya, berizin dan diawasi OJK' },
+        { name: 'description', content: 'Investasi reksa dana Danapathi Asset Management — buka rekening online dengan e-KTP, berizin dan diawasi OJK' },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },

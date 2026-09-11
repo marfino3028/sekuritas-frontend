@@ -59,9 +59,9 @@
     <div class="relative overflow-hidden rounded-card mb-6 text-white bg-brand-gradient shadow-soft">
       <!-- Decorative orbs -->
       <div class="absolute -top-20 -right-16 w-64 h-64 rounded-full opacity-25 blur-2xl"
-           style="background: radial-gradient(circle, #D59997, transparent 70%)"></div>
+           style="background: radial-gradient(circle, #9FD6BB, transparent 70%)"></div>
       <div class="absolute -bottom-16 -left-12 w-48 h-48 rounded-full opacity-20 blur-2xl"
-           style="background: radial-gradient(circle, #C7D2FE, transparent 70%)"></div>
+           style="background: radial-gradient(circle, #8AA5C6, transparent 70%)"></div>
 
       <div class="relative p-6 lg:p-7">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
@@ -254,10 +254,10 @@ const checklist = computed(() => [
 ])
 
 const quickActions = [
-  { label: 'Beli', icon: '📈', to: '/produk', bg: 'linear-gradient(135deg, #F6D0D1, #C7D2FE)' },
-  { label: 'Portofolio', icon: '💼', to: '/portofolio', bg: 'linear-gradient(135deg, #F5DEDF, #DDD6FE)' },
-  { label: 'Transaksi', icon: '📋', to: '/transaksi', bg: 'linear-gradient(135deg, #FBEAEA, #F6D0D1)' },
-  { label: 'Profil', icon: '⚙️', to: '/profil', bg: 'linear-gradient(135deg, #FBF1F1, #F5DEDF)' },
+  { label: 'Beli', icon: '📈', to: '/produk', bg: 'linear-gradient(135deg, #D9E3EF, #CDEBDC)' },
+  { label: 'Portofolio', icon: '💼', to: '/portofolio', bg: 'linear-gradient(135deg, #EEF3F9, #D9E3EF)' },
+  { label: 'Transaksi', icon: '📋', to: '/transaksi', bg: 'linear-gradient(135deg, #E9F5EF, #CDEBDC)' },
+  { label: 'Profil', icon: '⚙️', to: '/profil', bg: 'linear-gradient(135deg, #F8FAFC, #EEF3F9)' },
 ]
 
 const recentTransactions: any[] = []

@@ -45,7 +45,7 @@
           <div class="bg-slate-50 rounded-xl p-4">
             <p class="text-xs text-slate-500 mb-1">Transfer ke Rekening</p>
             <p class="font-bold text-slate-900">BCA - 8127-0000-1234</p>
-            <p class="text-sm text-slate-600">a/n PT Victoria Sekuritas Indonesia</p>
+            <p class="text-sm text-slate-600">a/n PT Danapathi Asset Management</p>
           </div>
           <div class="flex justify-between">
             <span class="text-sm text-slate-500">Jumlah Transfer</span>

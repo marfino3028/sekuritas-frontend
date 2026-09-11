@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Komponen gaya Danapathi — dipakai lintas halaman. Token warna di tailwind.config.ts */
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  /* Pill hijau "Portal Investor" di navbar */
+  .btn-cta {
+    @apply inline-flex items-center justify-center h-[42px] px-[22px] rounded-full bg-accent-500 text-white
+      font-display font-semibold text-[15px] transition-all duration-200
+      hover:bg-accent-600 hover:-translate-y-0.5 hover:shadow-cta;
+  }
+  /* Tombol utama navy */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 min-h-[54px] px-[30px] rounded-btn bg-primary-600 text-white
+      font-display font-semibold text-base transition-all duration-200
+      hover:bg-primary-700 hover:-translate-y-0.5;
+  }
+  /* Tombol sekunder putih transparan */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 min-h-[54px] px-[30px] rounded-btn bg-white/85 text-primary-600
+      border border-primary-600/10 font-display font-semibold text-base transition-all duration-200
+      hover:border-primary-500;
+  }
+  /* Tombol outline kecil "Lihat Semua →" */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-[22px] py-3 rounded-btnsm bg-white text-primary-600 border border-primary-600/10
+      font-display font-semibold text-[13px] transition-all duration-200
+      hover:bg-primary-600 hover:text-white;
+  }
+  /* Label kecil uppercase di atas judul */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-eyebrow text-primary-600;
+  }
+  .eyebrow-bar::before {
+    content: '';
+    @apply inline-block w-6 h-[3px] rounded-full bg-accent-500;
+  }
+  /* Judul section: besar, rapat */
+  .h-section {
+    @apply font-display font-bold text-primary-600 text-[28px] sm:text-[34px] lg:text-[44px] leading-[1.1] tracking-heading;
+  }
+  .p-section {
+    @apply text-[15px] leading-[1.9] text-ink-desc;
+  }
+}

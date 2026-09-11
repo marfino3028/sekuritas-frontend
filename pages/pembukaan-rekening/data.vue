@@ -114,7 +114,7 @@
               <label class="flex items-center gap-1"><input type="radio" :value="false" v-model="add.questions[i]" /> Tidak</label>
             </div>
           </div>
-          <F label="Darimana Anda mengetahui Victoria Sekuritas?" class="mt-3">
+          <F label="Darimana Anda mengetahui Danapathi?" class="mt-3">
             <select v-model="add.know_from" class="fld"><option value="">Pilih</option><option value="keluarga">Keluarga/Teman</option><option value="event">Event</option><option value="medsos">Media Sosial</option><option value="website">Website</option><option value="internet">Internet</option><option value="spm">Sekolah Pasar Modal</option><option value="lainnya">Lainnya</option></select>
           </F>
         </div>
@@ -142,7 +142,7 @@
         <h2 class="text-lg font-display font-extrabold text-slate-800">Persyaratan &amp; Ketentuan</h2>
         <div class="rounded-xl border border-slate-200 p-4 max-h-40 overflow-y-auto text-xs text-slate-500 leading-relaxed">
           <p class="font-semibold text-slate-700 mb-1">Persyaratan dan Ketentuan Umum</p>
-          Persyaratan dan ketentuan ini mengatur hubungan antara PT Victoria Sekuritas Indonesia dan Nasabah. Nasabah memberi kuasa kepada Victoria Sekuritas untuk bertindak sesuai instruksi yang sah. Pesanan transaksi dilaksanakan apabila Nasabah telah memiliki SID atas namanya, tersedia dana/efek yang cukup, dan dalam batas trading limit. Nasabah wajib membuka Sub Rekening Efek serta RDN sesuai ketentuan KSEI & OJK.
+          Persyaratan dan ketentuan ini mengatur hubungan antara PT Danapathi Asset Management selaku Manajer Investasi dan Nasabah selaku Pemegang Unit Penyertaan. Pembelian dan penjualan kembali unit penyertaan diproses sesuai prospektus dan Kontrak Investasi Kolektif (KIK) masing-masing reksa dana. Transaksi dilaksanakan apabila Nasabah telah memiliki SID dan IFUA atas namanya serta dana telah efektif diterima di rekening reksa dana pada bank kustodian.
         </div>
         <label class="flex items-start gap-3 text-sm text-slate-600">
           <input type="checkbox" v-model="agreeTnc" class="mt-0.5 rounded text-primary-600" />
@@ -210,7 +210,7 @@ async function setupPads() {
     canvas.width = canvas.offsetWidth * ratio
     canvas.height = canvas.offsetHeight * ratio
     canvas.getContext('2d')!.scale(ratio, ratio)
-    const pad = new SignaturePad(canvas, { penColor: '#A40001', minWidth: 1, maxWidth: 2.5 })
+    const pad = new SignaturePad(canvas, { penColor: '#00214A', minWidth: 1, maxWidth: 2.5 })
     pad.addEventListener('endStroke', onEnd)
     return pad
   }
@@ -264,10 +264,10 @@ const add = ref({
 })
 
 const questions = [
-  'Apakah Anda/Keluarga memiliki rekening efek di Victoria Sekuritas?',
-  'Apakah Anda memiliki hubungan dengan pemegang saham/Komisaris/Direksi/Karyawan Victoria Sekuritas?',
-  'Apakah Anda pemegang saham pengendali dari perusahaan yang memiliki rekening efek di Victoria Sekuritas?',
-  'Apakah Anda memiliki kendali terhadap salah satu rekening efek di Victoria Sekuritas?',
+  'Apakah Anda/Keluarga memiliki rekening reksa dana di Danapathi?',
+  'Apakah Anda memiliki hubungan dengan pemegang saham/Komisaris/Direksi/Karyawan Danapathi?',
+  'Apakah Anda pemegang saham pengendali dari perusahaan yang memiliki rekening reksa dana di Danapathi?',
+  'Apakah Anda memiliki kendali terhadap salah satu rekening reksa dana di Danapathi?',
   'Apakah Anda memiliki 5% atau lebih saham suatu perusahaan publik?',
   'Apakah Anda/Keluarga menduduki/dicalonkan untuk posisi publik/politis (PEP)?',
   'Apakah data yang Anda berikan benar dan dapat dipertanggungjawabkan?',
@@ -358,7 +358,7 @@ const Upload = (props: { label: string; type: string; done: boolean }, { emit }:
 }
 Upload.emits = ['uploaded', 'err']
 
-useHead({ title: 'Lengkapi Data — Victoria Sekuritas' })
+useHead({ title: 'Lengkapi Data — Danapathi' })
 </script>
 
 <style scoped>

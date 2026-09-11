@@ -140,7 +140,7 @@
             <span class="text-slate-600 flex-1">{{ i + 1 }}. {{ q }}</span>
             <div class="flex gap-3 shrink-0"><label class="flex items-center gap-1"><input type="radio" :value="true" v-model="add.questions[i]" /> Ya</label><label class="flex items-center gap-1"><input type="radio" :value="false" v-model="add.questions[i]" /> Tidak</label></div>
           </div>
-          <F label="Darimana Anda mengetahui Victoria Sekuritas?" class="mt-3"><select v-model="add.know_from" class="fld"><option value="">Pilih</option><option value="keluarga">Keluarga/Teman</option><option value="event">Event</option><option value="medsos">Media Sosial</option><option value="website">Website</option><option value="internet">Internet</option><option value="spm">Sekolah Pasar Modal</option><option value="lainnya">Lainnya</option></select></F>
+          <F label="Darimana Anda mengetahui Danapathi?" class="mt-3"><select v-model="add.know_from" class="fld"><option value="">Pilih</option><option value="keluarga">Keluarga/Teman</option><option value="event">Event</option><option value="medsos">Media Sosial</option><option value="website">Website</option><option value="internet">Internet</option><option value="spm">Sekolah Pasar Modal</option><option value="lainnya">Lainnya</option></select></F>
         </div>
         <div class="pt-2 border-t border-slate-100">
           <p class="text-sm font-semibold text-primary-700 mb-2">FATCA Deklarasi</p>
@@ -159,7 +159,7 @@
         <h2 class="text-lg font-display font-extrabold text-slate-800">Persyaratan &amp; Ketentuan</h2>
         <div class="rounded-xl border border-slate-200 p-4 max-h-40 overflow-y-auto text-xs text-slate-500 leading-relaxed">
           <p class="font-semibold text-slate-700 mb-1">Persyaratan dan Ketentuan Umum</p>
-          Persyaratan dan ketentuan ini mengatur hubungan antara PT Victoria Sekuritas Indonesia dan Nasabah. Nasabah memberi kuasa kepada Victoria Sekuritas untuk bertindak sesuai instruksi yang sah. Pesanan transaksi dilaksanakan apabila Nasabah telah memiliki SID atas namanya, tersedia dana/efek yang cukup, dan dalam batas trading limit. Nasabah wajib membuka Sub Rekening Efek serta RDN sesuai ketentuan KSEI &amp; OJK. Dengan menyetujui, Nasabah menyatakan seluruh data yang diberikan benar.
+          Persyaratan dan ketentuan ini mengatur hubungan antara PT Danapathi Asset Management selaku Manajer Investasi dan Nasabah selaku Pemegang Unit Penyertaan. Pembelian dan penjualan kembali unit penyertaan diproses sesuai prospektus dan Kontrak Investasi Kolektif (KIK) masing-masing reksa dana. Transaksi dilaksanakan apabila Nasabah telah memiliki SID dan IFUA atas namanya serta dana telah efektif diterima di rekening reksa dana pada bank kustodian. Dengan menyetujui, Nasabah menyatakan telah membaca prospektus dan seluruh data yang diberikan benar.
         </div>
         <label class="flex items-start gap-3 text-sm text-slate-600">
           <input type="checkbox" v-model="agreeTnc" class="mt-0.5 rounded text-primary-600" />
@@ -285,7 +285,7 @@ const add = ref({ investment_objective: '', investment_experience: '', questions
 const uploads = ref({ npwp: false, bank_book: false })
 const agreeTnc = ref(false)
 
-const questions = ['Apakah Anda/Keluarga memiliki rekening efek di Victoria Sekuritas?', 'Hubungan dengan pemegang saham/Komisaris/Direksi/Karyawan Victoria Sekuritas?', 'Pemegang saham pengendali perusahaan yang punya rekening efek di Victoria Sekuritas?', 'Punya kendali atas salah satu rekening efek di Victoria Sekuritas?', 'Memiliki 5% atau lebih saham perusahaan publik?', 'Anda/Keluarga menduduki/dicalonkan posisi publik/politis (PEP)?', 'Data yang diberikan benar dan dapat dipertanggungjawabkan?']
+const questions = ['Apakah Anda/Keluarga memiliki rekening reksa dana di Danapathi?', 'Hubungan dengan pemegang saham/Komisaris/Direksi/Karyawan Danapathi?', 'Pemegang saham pengendali perusahaan yang punya rekening reksa dana di Danapathi?', 'Punya kendali atas salah satu rekening reksa dana di Danapathi?', 'Memiliki 5% atau lebih saham perusahaan publik?', 'Anda/Keluarga menduduki/dicalonkan posisi publik/politis (PEP)?', 'Data yang diberikan benar dan dapat dipertanggungjawabkan?']
 const fatca = ['Saya Warga Negara Amerika Serikat', 'Saya pemegang green card', 'Saya tinggal di Amerika Serikat', 'U.S Indicia lainnya']
 
 // signature pads
@@ -429,7 +429,7 @@ async function setupPads() {
     if (!c) return null
     const ratio = Math.max(window.devicePixelRatio || 1, 1)
     c.width = c.offsetWidth * ratio; c.height = c.offsetHeight * ratio; c.getContext('2d')!.scale(ratio, ratio)
-    const p = new SignaturePad(c, { penColor: '#A40001', minWidth: 1, maxWidth: 2.5 })
+    const p = new SignaturePad(c, { penColor: '#00214A', minWidth: 1, maxWidth: 2.5 })
     p.addEventListener('endStroke', onEnd); return p
   }
   sigPad = init(sigCanvas.value, () => (hasSig.value = !sigPad.isEmpty()))
@@ -467,7 +467,7 @@ const Upload = (props: any, { emit }: any) => {
 Upload.props = ['label', 'type', 'done']
 Upload.emits = ['uploaded', 'err']
 
-useHead({ title: 'Pembukaan Rekening — Victoria Sekuritas' })
+useHead({ title: 'Pembukaan Rekening — Danapathi' })
 </script>
 
 <style scoped>

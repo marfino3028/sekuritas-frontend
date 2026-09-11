@@ -50,5 +50,5 @@ onMounted(async () => {
   }
 })
 
-useHead({ title: 'Aktivasi Akun — Victoria Sekuritas' })
+useHead({ title: 'Aktivasi Akun — Danapathi' })
 </script>

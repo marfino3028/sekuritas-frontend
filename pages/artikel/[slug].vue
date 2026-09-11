@@ -277,7 +277,7 @@ watch(slug, (val) => {
 watchEffect(() => {
   if (article.value) {
     useHead({
-      title: `${article.value.title} — Victoria Sekuritas`,
+      title: `${article.value.title} — Danapathi`,
       meta: [{ name: 'description', content: article.value.excerpt || article.value.title }],
     })
   }

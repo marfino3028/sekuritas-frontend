@@ -1,41 +1,25 @@
 <template>
-  <div class="min-h-screen flex flex-col overflow-hidden relative bg-brand-gradient">
-    <!-- Decorative gradient blobs -->
-    <div class="absolute -top-48 -right-32 w-[560px] h-[560px] rounded-full pointer-events-none blur-3xl"
-         style="background: radial-gradient(circle, rgba(196,113,119,0.35) 0%, transparent 68%)"></div>
-    <div class="absolute -bottom-40 -left-40 w-[420px] h-[420px] rounded-full pointer-events-none blur-3xl"
-         style="background: radial-gradient(circle, rgba(164,0,1,0.28) 0%, transparent 68%)"></div>
-    <div class="absolute top-1/4 left-1/3 w-72 h-72 rounded-full pointer-events-none blur-2xl"
-         style="background: radial-gradient(circle, rgba(213,153,151,0.16) 0%, transparent 70%)"></div>
+  <div class="min-h-screen flex flex-col relative overflow-hidden bg-surface-hero font-sans">
+    <!-- Foto gedung (gaya hero Danapathi) memudar ke kiri -->
+    <img src="/images/hero.jpg" alt="" class="absolute inset-y-0 right-0 h-full w-full lg:w-[60%] object-cover pointer-events-none" />
+    <div class="absolute inset-0 bg-hero-fade pointer-events-none"></div>
+    <div class="absolute inset-0 bg-white/50 lg:hidden pointer-events-none"></div>
 
-    <!-- Header -->
     <header class="relative z-10 py-6 px-6 sm:px-10 flex-shrink-0">
-      <NuxtLink to="/" class="flex items-center gap-3 w-fit group">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-card bg-white transition-transform duration-200 group-hover:-translate-y-0.5">
-          <img src="/logo.png" alt="Victoria Sekuritas" class="w-7 h-7 object-contain" />
-        </div>
-        <div>
-          <p class="text-[18px] font-display font-extrabold text-white tracking-tight leading-none">Victoria Sekuritas</p>
-          <p class="text-[11px] font-medium leading-none mt-1 text-accent-100">Demo Platform</p>
-        </div>
+      <NuxtLink to="/" class="inline-flex">
+        <img src="/logo.png" alt="Danapathi Asset Management" class="h-11 w-auto" />
       </NuxtLink>
     </header>
 
-    <!-- Main Content -->
-    <main class="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
+    <main class="relative z-10 flex-1 flex items-center justify-center lg:justify-start px-4 sm:px-10 lg:px-24 py-8">
       <div class="w-full max-w-md">
         <slot />
       </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="relative z-10 py-6 text-center flex-shrink-0">
-      <p class="text-xs text-white/55">
-        Berizin dan Diawasi oleh <span class="font-semibold text-accent-100">OJK</span>
-      </p>
-      <p class="text-xs mt-1 text-white/40">
-        &copy; {{ new Date().getFullYear() }} PT Victoria Sekuritas Indonesia. Hak Cipta Dilindungi.
-      </p>
+    <footer class="relative z-10 py-6 px-6 sm:px-10 lg:px-24 flex-shrink-0 text-xs text-slate-500">
+      <p>Berizin dan diawasi oleh <span class="font-semibold text-primary-900">Otoritas Jasa Keuangan (OJK)</span></p>
+      <p class="mt-1">&copy; {{ new Date().getFullYear() }} PT Danapathi Asset Management. Hak cipta dilindungi.</p>
     </footer>
   </div>
 </template>
